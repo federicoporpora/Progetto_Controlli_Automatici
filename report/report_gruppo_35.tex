@@ -1,0 +1,117 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=3cm]{geometry}
+\usepackage[]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{geometry}
+\geometry{a4paper, top=2cm, bottom=3cm, left=1.5cm, right=1.5cm, heightrounded, bindingoffset=5mm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{graphicx}
+\usepackage{psfrag,amsmath,amsfonts,verbatim}
+\usepackage{xcolor}
+\usepackage{color,soul}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{newlfont}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsthm}
+%\usepackage{subfigure}
+\usepackage{subcaption}
+\usepackage{psfrag}
+\usepackage{footnote}
+\usepackage{graphics}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+
+\usetikzlibrary{snakes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes,arrows}
+
+	
+	\tikzstyle{block} = [draw, fill=white, rectangle, 
+	minimum height=3em, minimum width=6em]
+	\tikzstyle{sum} = [draw, fill=white, circle, node distance=1cm]
+	\tikzstyle{input} = [coordinate]
+	\tikzstyle{output} = [coordinate]
+	\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+
+\newcommand{\courseacronym}{CAT}
+\newcommand{\coursename}{Linea Guida Report\\Controlli Automatici - T}
+\newcommand{\tipology}{A} % Inserito A (o lascia vuoto se diverso)
+\newcommand{\trace}{1}    % Inserito Traccia 1
+\newcommand{\projectname}{Controllo di due serbatoi d'acqua in cascata}
+\newcommand{\group}{X} % Inserisci il numero del tuo gruppo
+
+%opening
+\title{ \vspace{-1in}
+		\huge \strut \coursename \strut 
+		\\
+		\Large  \strut Progetto Tipologia \tipology - Traccia \trace 
+		\\
+		\Large  \strut \projectname\strut
+		\\
+		\Large  \strut Gruppo \group\strut
+		\vspace{-0.4cm}
+}
+\author{Autore 1, Autore 2, Autore 3} % Inserisci i vostri nomi
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-0.5cm}
+
+Il progetto riguarda il controllo di due serbatoi d'acqua in cascata, la cui dinamica viene descritta dalle seguenti equazioni differenziali 
+%
+\begin{subequations}\label{eq:system}
+\begin{align}
+	\dot{a}_{1}(t) &= -k_{1}\sqrt{a_{1}(t)}+k_{4}V(t)
+	\\
+	\dot{a}_{2}(t) &= k_{2}\sqrt{a_{1}(t)}-k_{3}\sqrt{a_{2}(t)},
+\end{align}
+\end{subequations}
+%
+dove $a_1(t)$ e $a_2(t)$ rappresentano i livelli dei serbatoi, $V(t)$ la tensione della pompa e $k_i$ sono parametri geometrici.
+
+
+\section{Espressione del sistema in forma di stato e calcolo del sistema linearizzato intorno ad una coppia di equilibrio}
+
+Innanzitutto, esprimiamo il sistema~\eqref{eq:system} nella seguente forma di stato
+%
+\begin{subequations}
+\begin{align}\label{eq:state_form}
+	\dot{x} &= f(x,u)
+	\\
+	y &= h(x,u).
+\end{align}
+\end{subequations}
+%
+Pertanto, andiamo individuare lo stato $x$, l'ingresso $u$ e l'uscita $y$ del sistema come segue 
+%
+\begin{align*}
+	x := \begin{bmatrix} a_1(t) \\ a_2(t) \end{bmatrix}, \quad u := V(t), \quad y := a_2(t).
+\end{align*}
+%
+Coerentemente con questa scelta, ricaviamo dal sistema~\eqref{eq:system} la seguente espressione per le funzioni $f$ ed $h$
+%
+\begin{align*}
+	f(x,u) &:= \begin{bmatrix} -k_1 \sqrt{x_1} + k_4 u \\ k_2 \sqrt{x_1} - k_3 \sqrt{x_2} \end{bmatrix}
+	\\
+	h(x,u) &:= x_2.
+\end{align*}
+%
+Una volta calcolate $f$ ed $h$ esprimiamo~\eqref{eq:system} nella seguente forma di stato
+%
+\begin{subequations}\label{eq:our_system_state_form}
+\begin{align}
+	\begin{bmatrix}
+		\dot{x}_1
+		\\
+		\dot{x
