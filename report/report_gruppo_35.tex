@@ -93,7 +93,7 @@ Innanzitutto, esprimiamo il sistema~\eqref{eq:system} nella seguente forma di st
 \end{align}
 \end{subequations}
 %
-Pertanto, andiamo individuare lo stato $x$, l'ingresso $u$ e l'uscita $y$ del sistema come segue 
+Pertanto, andiamo ad individuare lo stato $x$, l'ingresso $u$ e l'uscita $y$ del sistema come segue 
 %
 \begin{align*}
 	x := \begin{bmatrix} a_1(t) \\ a_2(t) \end{bmatrix}, \quad u := V(t), \quad y := a_2(t).
@@ -160,13 +160,41 @@ dove le matrici $A$, $B$, $C$ e $D$ vengono calcolate come
 %
 \begin{subequations}\label{eq:matrices}
 \begin{align}
-	A &= \dots
+	A &= 
+    \begin{bmatrix}
+        \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} \\[1em]
+        \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        -\frac{k_1}{2\sqrt{x_{1,e}}} & 0 \\[1em]
+        \frac{k_2}{2\sqrt{x_{1,e}}} & -\frac{k_3}{2\sqrt{x_{2,e}}}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        -0.3262 & 0 \\
+        4.8925 & -0.0313
+    \end{bmatrix}
 	\\
-	B &= \dots
+	B &= 
+    \begin{bmatrix}
+        \frac{\partial f_1}{\partial u} \\[1em]
+        \frac{\partial f_2}{\partial u}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        k_4 \\[1em]
+        0
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        2.5000 \\
+        0
+    \end{bmatrix}
 	\\
-	C &= \dots
+	C &= \begin{bmatrix} 0 & 1 \end{bmatrix}
 	\\
-	D &= \dots.
+	D &= 0.
 \end{align}
 \end{subequations}
 %
@@ -174,32 +202,48 @@ dove le matrici $A$, $B$, $C$ e $D$ vengono calcolate come
 
 In questa sezione, andiamo a calcolare la funzione di trasferimento $G(s)$ dall'ingresso $\delta u$ all'uscita $\delta y$ mediante la seguente formula 
 %
-%
 \begin{align}\label{eq:transfer_function}
-G(s) = \dots = \dots.
+G(s) = C(sI-A)^{-1}B + D.
 \end{align}
 %
-Dunque il sistema linearizzato~\eqref{eq:linearized_system} è caratterizzato dalla funzione di trasferimento~\eqref{eq:transfer_function} con $\dots$ poli $p_1 = \cdots, \cdots$ e $\dots$ zeri $z_i =\cdots$. In Figura \dots mostriamo il corrispondente diagramma di Bode.
-
-\dots
+Calcoliamo preliminarmente la matrice $(sI-A)$ e il suo determinante (polinomio caratteristico):
+%
+\begin{equation}
+    (sI-A) = 
+    \begin{bmatrix}
+        s + 0.3262 & 0 \\
+        -4.8925 & s + 0.0313
+    \end{bmatrix}, \quad \Delta_A(s) = (s + 0.3262)(s + 0.0313).
+\end{equation}
+%
+Svolgendo i calcoli matriciali, si ottiene:
+%
+\begin{align}
+    G(s) &= \begin{bmatrix} 0 & 1 \end{bmatrix} \frac{1}{\Delta_A(s)} 
+    \begin{bmatrix}
+        s + 0.0313 & 0 \\
+        4.8925 & s + 0.3262
+    \end{bmatrix}
+    \begin{bmatrix} 2.5000 \\ 0 \end{bmatrix} \nonumber \\
+    &= \frac{1}{\Delta_A(s)} \begin{bmatrix} 4.8925 & s + 0.3262 \end{bmatrix} \begin{bmatrix} 2.5000 \\ 0 \end{bmatrix} \nonumber \\
+    &= \frac{12.2313}{(s + 0.3262)(s + 0.0313)}.
+\end{align}
+%
+Dunque il sistema linearizzato~\eqref{eq:linearized_system} è caratterizzato dalla funzione di trasferimento~\eqref{eq:transfer_function} con 2 poli reali negativi $p_1 = -0.3262$, $p_2 = -0.0313$ e nessun zero. In Figura~\ref{fig:bode_diagram} mostriamo il corrispondente diagramma di Bode.
 
 \begin{figure}[h]
     \centering
-    \fbox{\parbox{0.35\textwidth}{\vspace{1.9cm} Placeholder \vspace{1.9cm}}}
-    \caption{Caption.}
+    \includegraphics[width=0.7\textwidth]{figs/bode.jpg}
+    \caption{Diagramma di Bode della funzione di trasferimento $G(s)$.}
     \label{fig:bode_diagram}
 \end{figure}
 
-\dots\\
-
-Inoltre, \dots
-
-\dots
-
-\dots
-
-\dots
-
+Inoltre, analizzando la funzione di trasferimento, possiamo fare alcune considerazioni preliminari sul comportamento del sistema:
+\begin{itemize}
+    \item \textbf{Stabilità:} Poiché entrambi i poli hanno parte reale strettamente negativa, il sistema linearizzato è asintoticamente stabile.
+    \item \textbf{Assenza di oscillazioni:} Essendo i poli reali (e non complessi coniugati), la risposta al gradino del sistema a catena aperta sarà di tipo aperiodico (sovrasmorzato), ovvero non presenterà sovraelongazioni naturali.
+    \item \textbf{Guadagno statico:} Il guadagno statico è $\mu = G(0) \approx 1198$ (circa $61.6$ dB). Questo valore elevato indica che una piccola variazione di tensione della pompa provoca, a regime, una grande variazione di livello nel secondo serbatoio.
+\end{itemize}
 
 \section{Mappatura specifiche del regolatore}
 \label{sec:specifications}
