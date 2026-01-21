@@ -126,4 +126,60 @@ hold on;
 
 % Disegno Zone Proibite (patch grafiche)
 % Specifica Disturbi: w <= 2, |L| >= 40dB
-patch([0.1
+patch([0.1 2 2 0.1], [40 40 100 100], 'r', 'FaceAlpha', 0.1, 'EdgeColor', 'r');
+text(0.2, 50, 'Zone Disturbi', 'Color', 'r');
+
+% Specifica Rumore: w >= 10^5, |L| <= -63dB
+patch([1e5 1e7 1e7 1e5], [-63 -63 50 50], 'b', 'FaceAlpha', 0.1, 'EdgeColor', 'b');
+text(2e5, -40, 'Zone Rumore', 'Color', 'b');
+
+title('Loop Shaping L(s) con specifiche');
+saveas(f2, fullfile(output_dir, 'loop_shaping.jpg'));
+fprintf('Salvato: loop_shaping.jpg\n');
+
+
+% --- FIGURA 3: BODE COMPARATIVO (G vs L) ---
+f3 = figure(3);
+bode(G_s, 'b--'); 
+hold on;
+bode(L_s, 'r-');
+grid on;
+legend('G(s) - Pianta', 'L(s) - Anello aperto');
+title('Confronto Bode: G(s) vs L(s)');
+saveas(f3, fullfile(output_dir, 'bode_comparativo.jpg'));
+fprintf('Salvato: bode_comparativo.jpg\n');
+
+
+% --- FIGURA 4: RISPOSTA AL GRADINO (Closed Loop) ---
+% Sistema in anello chiuso Y(s)/W(s) = F(s)
+F_s = L_s / (1 + L_s);
+
+% Riferimento W = 3
+W_amp = 3;
+
+f4 = figure(4);
+step(W_amp * F_s, 0.15); % Simulazione per 0.15s
+grid on;
+yline(W_amp * (1+0.05), 'k--'); % Limite +5%
+yline(W_amp * (1-0.05), 'k--'); % Limite -5%
+title('Risposta al gradino (Ampiezza = 3)');
+saveas(f4, fullfile(output_dir, 'step_response.jpg'));
+fprintf('Salvato: step_response.jpg\n');
+
+
+% --- FIGURA 5: FUNZIONI DI SENSITIVITÀ ---
+% S(s) = 1 / (1 + L(s))
+% F(s) = L(s) / (1 + L(s))
+S_s = 1 / (1 + L_s);
+
+f5 = figure(5);
+bodemag(S_s, 'b');
+hold on;
+bodemag(F_s, 'r--');
+grid on;
+legend('|S(jw)|', '|F(jw)|');
+title('Funzioni di Sensitività');
+saveas(f5, fullfile(output_dir, 'sensitivita.jpg'));
+fprintf('Salvato: sensitivita.jpg\n');
+
+fprintf('\nOperazioni completate. Controlla la cartella report/figs.\n');
