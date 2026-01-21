@@ -1,6 +1,4 @@
 \documentclass[a4paper, 11pt]{article}
-\usepackage[margin=3cm]{geometry}
-\usepackage[]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{geometry}
@@ -9,7 +7,7 @@
 \usepackage{amssymb}
 \usepackage{gensymb}
 \usepackage{graphicx}
-\usepackage{psfrag,amsmath,amsfonts,verbatim}
+\usepackage{psfrag,amsfonts,verbatim}
 \usepackage{xcolor}
 \usepackage{color,soul}
 \usepackage{fancyhdr}
@@ -19,6 +17,19 @@
 \usepackage{amsthm}
 \usepackage{subcaption}
 \usepackage{hyperref}
+
+% Pacchetti per disegnare i grafici (TikZ)
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+
+% Definizioni stili per i blocchi TikZ
+\tikzset{
+    block/.style = {draw, rectangle, minimum height=3em, minimum width=4em},
+    sum/.style = {draw, circle, node distance=1cm},
+    input/.style = {coordinate},
+    output/.style = {coordinate},
+    pinstyle/.style = {pin edge={to-,thin,black}}
+}
 
 % Definizioni per il corso
 \newcommand{\courseacronym}{CAT}
@@ -205,8 +216,8 @@ Il sistema linearizzato è caratterizzato da due poli reali negativi e nessun ze
 
 \begin{figure}[h]
     \centering
-    % Placeholder: assicurati che Matlab abbia generato figs/bode_G_plant.jpg
-    \fbox{\parbox{0.6\textwidth}{\vspace{2cm} \centering Placeholder: bode\_G\_plant.jpg \vspace{2cm}}}
+    % Assicurati che questo file esista nella cartella figs/
+    \includegraphics[width=0.7\textwidth]{figs/bode_G_plant.jpg}
     \caption{Diagramma di Bode della funzione di trasferimento $G(s)$ della pianta linearizzata.}
     \label{fig:bode_diagram_G}
 \end{figure}
@@ -239,8 +250,34 @@ In questa sezione viene illustrato il procedimento di sintesi del regolatore $R(
 
 \begin{figure}[h]
     \centering
-    % Placeholder immagine schema controllo
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: schema\_controllo.jpg \vspace{2cm}}}
+    % Disegno TikZ per SCHEMA CONTROLLO (Immagine 1)
+    \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+        % Nodi
+        \node [input, name=input] {};
+        \node [sum, right of=input] (sum1) {};
+        \node [sum, right of=sum1, node distance=1.5cm] (sum2) {};
+        \node [block, right of=sum2, node distance=2.5cm] (controller) {$R(s)$};
+        \node [block, right of=controller, node distance=3.5cm] (system) {$G(s)$};
+        \node [sum, right of=system, node distance=2cm] (sum3) {};
+        \node [output, right of=sum3] (output) {};
+        \node [input, above of=sum2, node distance=1.2cm] (noise) {$n$};
+        \node [input, above of=sum3, node distance=1.2cm] (disturbance) {$d$};
+
+        % Collegamenti
+        \draw [->] (input) -- node {$w$} (sum1);
+        \draw [->] (sum1) -- node {$e$} (sum2);
+        \draw [->] (sum2) -- node {} (controller);
+        \draw [->] (noise) -- node[pos=0.9] {$-$} (sum2);
+        \draw [->] (controller) -- node {$\delta u$} (system);
+        \draw [->] (system) -- node[pos=0.9] {$+$} (sum3);
+        \draw [->] (disturbance) -- node[pos=0.9] {$+$} (sum3);
+        \draw [->] (sum3) -- node [name=y] {$\delta y$}(output);
+        \draw [->] (y) |- node[pos=0.99] {$-$} (0.5,-1.5) -| (sum1);
+        
+        % Etichette segni somma (manuali per precisione)
+        \node at (sum1.south west) [xshift=-2pt, yshift=2pt] {\tiny $+$};
+        \node at (sum2.south west) [xshift=-2pt, yshift=2pt] {\tiny $+$};
+    \end{tikzpicture}
     \caption{Schema a blocchi del sistema di controllo a controreazione unitaria.}
     \label{fig:schema_controllo}
 \end{figure}
@@ -282,8 +319,8 @@ Per garantire $Y(s) \approx W(s)$, è necessario che $|S(j\omega)| \approx 0$ al
 
 \begin{figure}[h]
     \centering
-    % Placeholder grafico sensitività
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: sensitivita.jpg \vspace{2cm}}}
+    % Assicurati che questo file esista nella cartella figs/
+    \includegraphics[width=0.7\textwidth]{figs/sensitivita.jpg}
     \caption{Legame tra le funzioni di sensitività e il modulo della funzione d'anello.}
     \label{fig:sensitivita}
 \end{figure}
@@ -360,8 +397,8 @@ A coronamento della sintesi dinamica, si riporta il diagramma del modulo della f
 
 \begin{figure}[h]
     \centering
-    % Placeholder loop shaping
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: loop\_shaping.jpg \vspace{2cm}}}
+    % Assicurati che questo file esista nella cartella figs/
+    \includegraphics[width=0.7\textwidth]{figs/loop_shaping.jpg}
     \caption{Verifica del Loop-Shaping: la funzione d'anello evita le zone di esclusione garantendo le prestazioni richieste.}
 \end{figure}
 
@@ -380,8 +417,29 @@ Tale regolatore, posto in serie alla pianta $G(s)$, definisce la funzione d'anel
 
 \begin{figure}[h]
     \centering
-    % Placeholder schema finale
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: schema\_finale.jpg \vspace{2cm}}}
+    % Disegno TikZ per SCHEMA FINALE (Immagine 2)
+    \begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
+        % Nodi
+        \node [input, name=input] {};
+        \node [sum, right of=input] (sum1) {};
+        \node [block, right of=sum1, node distance=2cm] (controller) {$R(s)$};
+        \node [block, right of=controller, node distance=3cm] (system) {$G(s)$};
+        \node [sum, right of=system, node distance=2cm] (sum2) {};
+        \node [output, right of=sum2] (output) {};
+        % Disturbo in alto (in questo schema semplificato potrebbe essere inteso come generico o assente, ma lo metto come nel diagramma standard se richiesto)
+        \node [input, above of=sum2, node distance=1.2cm] (disturbance) {}; 
+
+        % Collegamenti
+        \draw [->] (input) -- node {$w(t)$} (sum1);
+        \draw [->] (sum1) -- node {$e(t)$} (controller);
+        \draw [->] (controller) -- node {$u(t)$} (system);
+        \draw [->] (system) -- node {} (sum2);
+        \draw [->] (disturbance) -- node {} (sum2);
+        \draw [->] (sum2) -- node [name=y] {$y(t)$}(output);
+        \draw [->] (y) |- node[pos=0.99] {$-$} (0.5,-1.5) -| (sum1);
+        
+        \node at (sum1.south west) [xshift=-2pt, yshift=2pt] {\tiny $+$};
+    \end{tikzpicture}
     \caption{Schema a blocchi finale del sistema di controllo.}
 \end{figure}
 
@@ -409,15 +467,15 @@ L'analisi dei risultati evidenzia come l'approccio basato sul \textit{loop-shapi
 
 \begin{figure}[h]
     \centering
-    % Placeholder bode comparativo
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: bode\_comparativo.jpg \vspace{2cm}}}
+    % Assicurati che questo file esista nella cartella figs/
+    \includegraphics[width=0.7\textwidth]{figs/bode_comparativo.jpg}
     \caption{Effetto del regolatore sul modulo della funzione d'anello: si osserva l'incremento del guadagno e lo spostamento della pulsazione critica.}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    % Placeholder risposta al gradino
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: step\_response.jpg \vspace{2cm}}}
+    % Assicurati che questo file esista nella cartella figs/
+    \includegraphics[width=0.7\textwidth]{figs/step_response.jpg}
     \caption{Risposta al gradino del sistema a ciclo chiuso.}
 \end{figure}
 
@@ -432,8 +490,9 @@ In Figura \dots, mostriamo lo schema a blocchi del sistema in anello chiuso. \do
 
 \begin{figure}[h]
     \centering
-    \fbox{\parbox{0.35\textwidth}{\vspace{1.9cm} Placeholder \vspace{1.9cm}}}
-    \caption{Caption.}
+    % PLACEHOLDER REINSERITO
+    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Schema Simulink Linearizzato \vspace{2cm}}}
+    \caption{Schema Simulink del sistema linearizzato controllato.}
     \label{fig:bode_diagram_L}
 \end{figure}
 
@@ -443,8 +502,9 @@ Di seguito è riportato \dots in merito alla risposta del sistema a fronte di un
 
 \begin{figure}[h]
     \centering
-    \fbox{\parbox{0.35\textwidth}{\vspace{1.9cm} Placeholder \vspace{1.9cm}}}
-    \caption{Caption.}
+    % PLACEHOLDER REINSERITO
+    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Risposta linearizzata \vspace{2cm}}}
+    \caption{Risposta temporale del sistema linearizzato.}
     \label{fig:bode_diagram_L2}
 \end{figure}
 
@@ -457,8 +517,9 @@ Inoltre possiamo notare dalle seguenti figure \dots che i disturbi \dots
 
 \begin{figure}[h]
     \centering
-    \fbox{\parbox{0.35\textwidth}{\vspace{1.9cm} Placeholder \vspace{1.9cm}}}
-    \caption{Caption.}
+    % PLACEHOLDER REINSERITO
+    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Reiezione disturbo linearizzata \vspace{2cm}}}
+    \caption{Reiezione del disturbo nel sistema linearizzato.}
     \label{fig:bode_diagram_L3}
 \end{figure}
 
@@ -478,8 +539,9 @@ In Figura \dots, mostriamo lo schema a blocchi del sistema in anello chiuso. \do
 
 \begin{figure}[h]
     \centering
-    \fbox{\parbox{0.35\textwidth}{\vspace{1.9cm} Placeholder \vspace{1.9cm}}}
-    \caption{Caption.}
+    % PLACEHOLDER REINSERITO
+    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Schema Simulink Non Lineare \vspace{2cm}}}
+    \caption{Schema Simulink del sistema non lineare.}
     \label{fig:bode_diagram_NL1}
 \end{figure}
 
@@ -489,8 +551,9 @@ Di seguito è riportato \dots in merito alla risposta del sistema a fronte di un
 
 \begin{figure}[h]
     \centering
-    \fbox{\parbox{0.35\textwidth}{\vspace{1.9cm} Placeholder \vspace{1.9cm}}}
-    \caption{Caption.}
+    % PLACEHOLDER REINSERITO
+    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Risposta non lineare \vspace{2cm}}}
+    \caption{Risposta temporale del sistema non lineare.}
     \label{fig:bode_diagram_NL2}
 \end{figure}
 
