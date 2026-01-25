@@ -135,4 +135,52 @@ legend('|S|', '|F|');
 title('Funzioni di Sensitività');
 saveas(gcf, fullfile(output_dir, 'sensitivita.jpg'));
 
+% -- SIMULAZIONE DISTURBI E RUMORE (Stile "lsim") --
+
+% Disturbo sull'uscita d(t)
+% d(t) = sum_{k=1}^4 1.0 * sin(0.1*k*t) -> Basse frequenze
+figure(6); clf; set(gcf, 'Color', 'w');
+hold on; grid on; zoom on;
+title("Test disturbo sull'uscita d(t)");
+
+td = 0:0.1:200; % Vettore tempo lungo (frequenze lente)
+d_val = zeros(size(td));
+% Costruzione sommatoria disturbo
+for k = 1:4
+    d_val = d_val + 1.0 * sin(0.1 * k * td);
+end
+
+% Simulazione risposta al solo disturbo (Funzione di trasf. S)
+sim_d = lsim(S, d_val, td);
+
+plot(td, sim_d, 'b', 'LineWidth', 1.5); % Uscita residua
+plot(td, d_val, 'r--', 'LineWidth', 1); % Ingresso disturbo
+xlabel('Tempo (secondi)'); ylabel('Ampiezza');
+legend('y_d(t) (Uscita)', 'd(t) (Disturbo)', 'Location', 'best');
+saveas(gcf, fullfile(output_dir, 'reiezione_disturbo_linearizzato.jpg'));
+
+
+% Rumore di misura n(t)
+% n(t) = sum_{k=1}^4 2.5 * sin(10^5*k*t) -> Alte frequenze
+figure(7); clf; set(gcf, 'Color', 'w');
+hold on; grid on; zoom on;
+title("Test disturbo di misura n(t)");
+
+tn = 0:1e-6:0.001; % Vettore tempo cortissimo e passo fine (frequenze altissime)
+n_val = zeros(size(tn));
+% Costruzione sommatoria rumore
+for k = 1:4
+    n_val = n_val + 2.5 * sin(1e5 * k * tn);
+end
+
+% Simulazione risposta al solo rumore (Funzione di trasf. -F)
+% Nota: Il rumore entra in retroazione, quindi la TF è -F
+sim_n = lsim(-F, n_val, tn);
+
+plot(tn, sim_n, 'b', 'LineWidth', 1.5); % Uscita residua
+plot(tn, n_val, 'r--', 'LineWidth', 1); % Ingresso rumore
+xlabel('Tempo (secondi)'); ylabel('Ampiezza');
+legend('y_n(t) (Uscita)', 'n(t) (Rumore)', 'Location', 'best');
+saveas(gcf, fullfile(output_dir, 'reiezione_rumore_linearizzato.jpg'));
+
 fprintf('Tutte le figure salvate in report/figs.\n');
