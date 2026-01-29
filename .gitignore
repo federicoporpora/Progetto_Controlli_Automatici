@@ -6,3 +6,6 @@
 *.fdb_latexmk
 *.synctex.gz
 *.dvi
+*.slxc
+*.mat
+*.xml
