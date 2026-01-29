@@ -18,6 +18,8 @@
 \usepackage{subcaption}
 \usepackage{hyperref}
 
+\usepackage{float}
+
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc}
 
@@ -210,7 +212,7 @@ Svolgendo il calcolo matriciale in (\ref{eq:transfer_function}) e sfruttando la 
 
 Il sistema linearizzato è caratterizzato da due poli reali negativi e nessun zero. In Figura~\ref{fig:bode_diagram_G} mostriamo il corrispondente diagramma di Bode.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/bode_G_plant.jpg}
     \caption{Diagramma di Bode della funzione di trasferimento $G(s)$ della pianta linearizzata.}
@@ -243,7 +245,7 @@ In questa sezione viene illustrato il procedimento di sintesi del regolatore $R(
     \item \textbf{Attenuazione rumore:} $|L(j\omega)|_{dB} \le -63$ dB per $\omega \ge 10^5$ rad/s.
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
         \node [input, name=input] {};
@@ -308,7 +310,7 @@ Tramite il principio di sovrapposizione degli effetti, definiamo le relazioni fo
 
 Per garantire $Y(s) \approx W(s)$, è necessario che $|S(j\omega)| \approx 0$ alle basse frequenze e $|F(j\omega)| \approx 0$ alle alte. In termini di modulo di $L(j\omega)$, queste richieste si traducono nelle approssimazioni mostrate nel grafico seguente.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/sensitivita.jpg}
     \caption{Legame tra le funzioni di sensitività e il modulo della funzione d'anello.}
@@ -385,7 +387,7 @@ A coronamento della sintesi dinamica, si riporta il diagramma del modulo della f
     \item \textbf{Zona di Alta Frequenza:} definita dalla Specifica 5 ($|L| \le -63$ dB per $\omega \ge 10^5$ rad/s).
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/loop_shaping.jpg}
     \caption{Verifica del Loop-Shaping: la funzione d'anello evita le zone di esclusione garantendo le prestazioni richieste.}
@@ -404,7 +406,7 @@ La funzione di trasferimento complessiva è:
 
 Tale regolatore, posto in serie alla pianta $G(s)$, definisce la funzione d'anello finale $L(s) = R(s)G(s)$. Il progetto garantisce che la pendenza del modulo di $L(j\omega)$ in corrispondenza della pulsazione critica $\omega_c$ sia di circa $-20$ dB/dec, condizione ottimale per la stabilità del sistema retroazionato.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
         \node [input, name=input] {};
@@ -431,7 +433,7 @@ Tale regolatore, posto in serie alla pianta $G(s)$, definisce la funzione d'anel
 \subsubsection*{Validazione delle prestazioni}
 A seguito della sintesi, è stata effettuata una simulazione del sistema a ciclo chiuso per verificare la risposta al gradino del riferimento $w(t)$ e la capacità di reiezione del disturbo $d(t)$. I risultati sono sintetizzati nella tabella seguente.
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.6}
 \begin{tabular}{|l|c|c|c|}
@@ -450,13 +452,13 @@ Attenuazione rumore ($|L(j10^5)|$) & $\le -63$ dB & $-71.2$ dB & \checkmark \\ \
 \subsubsection*{Conclusioni intermedie e grafici finali}
 L'analisi dei risultati evidenzia come l'approccio basato sul \textit{loop-shaping} abbia permesso di bilanciare correttamente le esigenze contrastanti di precisione e velocità. L'adozione di un guadagno $K_R = 60$ si è rivelata fondamentale per contrastare l'effetto del disturbo in uscita $D$, mentre la rete anticipatrice ha permesso di recuperare il margine di fase necessario per mantenere la sovraelongazione entro i limiti stabiliti, nonostante l'elevata pulsazione critica richiesta. Il sistema risulta pertanto stabile, veloce e robusto rispetto ai disturbi considerati.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/bode_comparativo.jpg}
     \caption{Effetto del regolatore sul modulo della funzione d'anello: si osserva l'incremento del guadagno e lo spostamento della pulsazione critica.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/step_response.jpg}
     \caption{Risposta al gradino del sistema a ciclo chiuso.}
@@ -468,7 +470,7 @@ In questa sezione, testiamo l'efficacia del controllore progettato sul sistema l
 
 In Figura~\ref{fig:simulink_lin}, mostriamo lo schema a blocchi del sistema in anello chiuso implementato nell'ambiente di simulazione.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/schema_simulink_linearizzato.jpg}
     \caption{Schema Simulink del sistema linearizzato controllato.}
@@ -477,7 +479,7 @@ In Figura~\ref{fig:simulink_lin}, mostriamo lo schema a blocchi del sistema in a
 
 Di seguito è riportato l'andamento temporale dell'uscita $\delta y(t)$ in confronto al riferimento $w(t)$, in merito alla risposta del sistema a fronte di un ingresso a gradino di ampiezza $W=3$.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/step_response.jpg}
     \caption{Risposta temporale del sistema linearizzato al gradino $w(t)=3$.}
@@ -488,14 +490,14 @@ Si nota che il sistema insegue il riferimento con errore nullo a regime, rispett
 
 Inoltre possiamo notare dalle seguenti figure che i disturbi agenti sul sistema vengono efficacemente attenuati dall'azione di controllo. La Figura~\ref{fig:rej_dist} mostra la reiezione del disturbo $d(t)$ a bassa frequenza, mentre la Figura~\ref{fig:rej_noise} evidenzia l'abbattimento del rumore di misura $n(t)$.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/reiezione_disturbo_linearizzato.jpg}
     \caption{Reiezione del disturbo $d(t)$ nel sistema linearizzato: confronto tra disturbo (rosso, tratteggiato) e uscita residua (blu).}
     \label{fig:rej_dist}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/reiezione_rumore_linearizzato.jpg}
     \caption{Reiezione del rumore $n(t)$ nel sistema linearizzato: il rumore (rosso) viene filtrato e non influenza l'uscita (blu).}
@@ -510,7 +512,7 @@ In questa sezione, testiamo l'efficacia del controllore progettato sul modello n
 
 In Figura \dots, mostriamo lo schema a blocchi del sistema in anello chiuso. \dots
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Schema Simulink Non Lineare \vspace{2cm}}}
     \caption{Schema Simulink del sistema non lineare.}
@@ -521,7 +523,7 @@ In Figura \dots, mostriamo lo schema a blocchi del sistema in anello chiuso. \do
 
 Di seguito è riportato \dots in merito alla risposta del sistema a fronte di un ingresso \dots
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Risposta non lineare \vspace{2cm}}}
     \caption{Risposta temporale del sistema non lineare.}
