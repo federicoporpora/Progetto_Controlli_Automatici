@@ -1,4 +1,6 @@
 \documentclass[a4paper, 11pt]{article}
+\usepackage[margin=3cm]{geometry}
+\usepackage[]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{geometry}
@@ -7,46 +9,56 @@
 \usepackage{amssymb}
 \usepackage{gensymb}
 \usepackage{graphicx}
-\usepackage{psfrag,amsfonts,verbatim}
+\usepackage{psfrag,amsmath,amsfonts,verbatim}
 \usepackage{xcolor}
 \usepackage{color,soul}
 \usepackage{fancyhdr}
 \usepackage{indentfirst}
+\usepackage{graphicx}
 \usepackage{newlfont}
+\usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage{latexsym}
 \usepackage{amsthm}
+%\usepackage{subfigure}
 \usepackage{subcaption}
+\usepackage{psfrag}
+\usepackage{footnote}
+\usepackage{graphics}
+\usepackage{color}
 \usepackage{hyperref}
-
-\usepackage{float}
-
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows,positioning,calc}
+\usepackage{float} % Aggiunto per posizionare le figure con [H]
 
-\tikzset{
-    block/.style = {draw, rectangle, minimum height=3em, minimum width=4em},
-    sum/.style = {draw, circle, node distance=1cm},
-    input/.style = {coordinate},
-    output/.style = {coordinate},
-    pinstyle/.style = {pin edge={to-,thin,black}}
-}
+\usetikzlibrary{snakes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes,arrows}
+
+	
+	\tikzstyle{block} = [draw, fill=white, rectangle, 
+	minimum height=3em, minimum width=6em]
+	\tikzstyle{sum} = [draw, fill=white, circle, node distance=1cm]
+	\tikzstyle{input} = [coordinate]
+	\tikzstyle{output} = [coordinate]
+	\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
 
 \newcommand{\courseacronym}{CAT}
-\newcommand{\coursename}{Linea Guida Report\\Controlli Automatici - T}
-\newcommand{\tipology}{A}
-\newcommand{\trace}{1}
+\newcommand{\coursename}{Relazione Progetto\\Controlli Automatici - T}
+\newcommand{\tipology}{A} % Inserisci tipologia corretta se diversa
+\newcommand{\trace}{1}    % Inserisci traccia corretta se diversa
 \newcommand{\projectname}{Controllo di due serbatoi d'acqua in cascata}
 \newcommand{\group}{35}
 
+%opening
 \title{ \vspace{-1in}
-        \huge \strut \coursename \strut 
-        \\
-        \Large  \strut Progetto Tipologia \tipology - Traccia \trace 
-        \\
-        \Large  \strut \projectname\strut
-        \\
-        \Large  \strut Gruppo \group\strut
-        \vspace{-0.4cm}
+		\huge \strut \coursename \strut 
+		\\
+		\Large  \strut Progetto Tipologia \tipology - Traccia \trace 
+		\\
+		\Large  \strut \projectname\strut
+		\\
+		\Large  \strut Gruppo \group\strut
+		\vspace{-0.4cm}
 }
 \author{Marco Calabri, Federico Porpora, Tommaso Portolani}
 \date{}
@@ -57,513 +69,274 @@
 \vspace{-0.5cm}
 
 Il progetto riguarda il controllo di due serbatoi d'acqua in cascata, la cui dinamica viene descritta dalle seguenti equazioni differenziali 
-
+%
 \begin{subequations}\label{eq:system}
 \begin{align}
-    \dot{a}_{1}(t) &= -k_{1}\sqrt{a_{1}(t)}+k_{4}V(t)
-    \\
+	\dot{a}_{1}(t) &= -k_{1}\sqrt{a_{1}(t)}+k_{4}V(t) \\
     \dot{a}_{2}(t) &= k_{2}\sqrt{a_{1}(t)}-k_{3}\sqrt{a_{2}(t)},
 \end{align}
 \end{subequations}
-
-dove $a_1(t)$ e $a_2(t)$ rappresentano i livelli dei serbatoi, $V(t)$ la tensione della pompa e $k_i$ sono parametri geometrici.
-
+%
+dove $a_1(t)$ e $a_2(t)$ rappresentano i livelli dei serbatoi, $V(t)$ la tensione applicata alla pompa e $k_i$ sono parametri fisici del sistema.
 
 \section{Espressione del sistema in forma di stato e calcolo del sistema linearizzato intorno ad una coppia di equilibrio}
 
 Innanzitutto, esprimiamo il sistema~\eqref{eq:system} nella seguente forma di stato
-
+%
 \begin{subequations}
 \begin{align}\label{eq:state_form}
-    \dot{x} &= f(x,u)
-    \\
-    y &= h(x,u).
+	\dot{x} &= f(x,u)
+	\\
+	y &= h(x,u).
 \end{align}
 \end{subequations}
-
-Pertanto, andiamo ad individuare lo stato $x$, l'ingresso $u$ e l'uscita $y$ del sistema come segue 
-
+%
+Pertanto, andiamo individuare lo stato $x$, l'ingresso $u$ e l'uscita $y$ del sistema come segue 
+%
 \begin{align*}
-    x := \begin{bmatrix} a_1(t) \\ a_2(t) \end{bmatrix}, \quad u := V(t), \quad y := a_2(t).
+	x := \begin{bmatrix} a_1(t) \\ a_2(t) \end{bmatrix}, \quad u := V(t), \quad y := a_2(t).
 \end{align*}
-
+%
 Coerentemente con questa scelta, ricaviamo dal sistema~\eqref{eq:system} la seguente espressione per le funzioni $f$ ed $h$
-
+%
 \begin{align*}
-    f(x,u) &:= \begin{bmatrix} -k_1 \sqrt{x_1} + k_4 u \\ k_2 \sqrt{x_1} - k_3 \sqrt{x_2} \end{bmatrix}
-    \\
-    h(x,u) &:= x_2.
+	f(x,u) &:= \begin{bmatrix} -k_1 \sqrt{x_1} + k_4 u \\ k_2 \sqrt{x_1} - k_3 \sqrt{x_2} \end{bmatrix}
+	\\
+	h(x,u) &:= x_2.
 \end{align*}
-
+%
 Una volta calcolate $f$ ed $h$ esprimiamo~\eqref{eq:system} nella seguente forma di stato
-
+%
 \begin{subequations}\label{eq:our_system_state_form}
 \begin{align}
-    \begin{bmatrix}
-        \dot{x}_1
-        \\
-        \dot{x}_2
-    \end{bmatrix} &= \begin{bmatrix} -k_1 \sqrt{x_1} + k_4 u \\ k_2 \sqrt{x_1} - k_3 \sqrt{x_2} \end{bmatrix} \label{eq:state_form_1}
-    \\
-    y &= x_2.
+	\begin{bmatrix}
+		\dot{x}_1
+		\\
+		\dot{x}_2
+	\end{bmatrix} &= \begin{bmatrix} -k_1 \sqrt{x_1} + k_4 u \\ k_2 \sqrt{x_1} - k_3 \sqrt{x_2} \end{bmatrix} \label{eq:state_form_1}
+	\\
+	y &= x_2.
 \end{align}
 \end{subequations}
-
+%
 Per trovare la coppia di equilibrio $(x_e, u_e)$ di~\eqref{eq:our_system_state_form}, andiamo a risolvere il seguente sistema di equazioni imponendo $\dot{x}=0$
-
+%
 \begin{align}
-    \begin{cases}
+	\begin{cases}
     -k_1 \sqrt{x_{1,e}} + k_4 u_e = 0 \\
-    k_2 \sqrt{x_{1,e}} - k_3 \sqrt{x_{2,e}} = 0
+    k_2 \sqrt{x_{1,e}} - k_3 \sqrt{x_{2,e}} = 0,
     \end{cases}
 \end{align}
-
-dal quale, utilizzando i parametri $a_{1,eq}=0.0235$ e $a_{2,eq}=3.67$ forniti dalla traccia, otteniamo
-
+%
+dal quale otteniamo, utilizzando i dati della traccia ($a_{1,eq}=0.0235$ e $a_{2,eq}=3.67$),
+%
 \begin{align}
-    x_e := \begin{bmatrix} 0.0235 \\ 3.67 \end{bmatrix},  \quad u_e = 0.00613.\label{eq:equilibirum_pair}
+	x_e := \begin{bmatrix} 0.0235 \\ 3.67 \end{bmatrix},  \quad u_e = 0.00613.\label{eq:equilibirum_pair}
 \end{align}
-
+%
 Definiamo le variabili alle variazioni $\delta x$, $\delta u$ e $\delta y$ come 
-
+%
 \begin{align*}
-    \delta x &= x - x_e, 
-    \quad
-    \delta u = u - u_e, 
-    \quad
-    \delta y = y - y_e.
+	\delta x &= x - x_e, 
+	\quad
+	\delta u = u - u_e, 
+	\quad
+	\delta y = y - y_e.
 \end{align*}
-
+%
 L'evoluzione del sistema espressa nelle variabili alle variazioni pu\`o essere approssimativamente descritta mediante il seguente sistema lineare
-
+%
 \begin{subequations}\label{eq:linearized_system}
 \begin{align}
-    \delta \dot{x} &= A\delta x + B\delta u
-    \\
-    \delta y &= C\delta x + D\delta u,
+	\delta \dot{x} &= A\delta x + B\delta u
+	\\
+	\delta y &= C\delta x + D\delta u,
 \end{align}
 \end{subequations}
-
+%
 dove le matrici $A$, $B$, $C$ e $D$ vengono calcolate come
-
+%
 \begin{subequations}\label{eq:matrices}
 \begin{align}
-    A &= 
-    \begin{bmatrix}
-        \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} \\[1em]
-        \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2}
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        -\frac{k_1}{2\sqrt{x_{1,e}}} & 0 \\[1em]
-        \frac{k_2}{2\sqrt{x_{1,e}}} & -\frac{k_3}{2\sqrt{x_{2,e}}}
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        -0.3262 & 0 \\
-        4.8925 & -0.0313
-    \end{bmatrix}
-    \\
-    B &= 
-    \begin{bmatrix}
-        \frac{\partial f_1}{\partial u} \\[1em]
-        \frac{\partial f_2}{\partial u}
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        k_4 \\[1em]
-        0
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        2.5000 \\
-        0
-    \end{bmatrix}
-    \\
-    C &= \begin{bmatrix} 0 & 1 \end{bmatrix}
-    \\
-    D &= 0.
+	A &= \begin{bmatrix} -0.3262 & 0 \\ 4.8925 & -0.0313 \end{bmatrix}
+	\\
+	B &= \begin{bmatrix} 2.5000 \\ 0 \end{bmatrix}
+	\\
+	C &= \begin{bmatrix} 0 & 1 \end{bmatrix}
+	\\
+	D &= 0.
 \end{align}
 \end{subequations}
-
+%
 \section{Calcolo Funzione di Trasferimento}
 
-In questa sezione, andiamo a calcolare la funzione di trasferimento $G(s)$ dall'ingresso $\delta u$ (variazione di tensione) all'uscita $\delta y$ (variazione di livello del secondo serbatoio) mediante la formula:
-
+In questa sezione, andiamo a calcolare la funzione di trasferimento $G(s)$ dall'ingresso $\delta u$ all'uscita $\delta y$ mediante la seguente formula 
+%
+%
 \begin{align}\label{eq:transfer_function}
-G(s) = C(sI-A)^{-1}B + D.
+G(s) = C(sI-A)^{-1}B + D = \frac{12.23}{(s+0.3262)(s+0.0313)}.
 \end{align}
-
-Data la struttura triangolare inferiore della matrice $A$, i suoi autovalori (che corrispondono ai poli del sistema) sono gli elementi sulla diagonale principale:
-
-\begin{equation}
-    p_1 = A_{1,1} \approx -0.3262, \quad p_2 = A_{2,2} \approx -0.0313.
-\end{equation}
-
-Il polinomio caratteristico è dunque $\Delta_A(s) = (s - p_1)(s - p_2) = (s + 0.3262)(s + 0.0313)$.
-
-Svolgendo il calcolo matriciale in (\ref{eq:transfer_function}) e sfruttando la struttura simbolica del sistema linearizzato, si ottiene la seguente espressione per la funzione di trasferimento:
-
-\begin{align}
-    G(s) &= \frac{B_1 A_{2,1}}{(s - A_{1,1})(s - A_{2,2})} \nonumber \\
-         &= \frac{2.5000 \cdot 4.8925}{(s + 0.3262)(s + 0.0313)} \nonumber \\
-         &= \frac{12.2313}{(s + 0.3262)(s + 0.0313)}.
-\end{align}
-
-Il sistema linearizzato è caratterizzato da due poli reali negativi e nessun zero. In Figura~\ref{fig:bode_diagram_G} mostriamo il corrispondente diagramma di Bode.
+%
+Dunque il sistema linearizzato~\eqref{eq:linearized_system} è caratterizzato dalla funzione di trasferimento~\eqref{eq:transfer_function} con 2 poli $p_1 = -0.3262, p_2 = -0.0313$ e 0 zeri.
+In Figura \ref{fig:bode_G} mostriamo il corrispondente diagramma di Bode.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/bode_G_plant.jpg}
-    \caption{Diagramma di Bode della funzione di trasferimento $G(s)$ della pianta linearizzata.}
-    \label{fig:bode_diagram_G}
+    \caption{Diagramma di Bode della funzione di trasferimento $G(s)$.}
+    \label{fig:bode_G}
 \end{figure}
 
-Analizzando la funzione di trasferimento, possiamo fare alcune considerazioni preliminari:
+Inoltre, notiamo che il sistema è asintoticamente stabile (poli a parte reale negativa) e presenta un guadagno statico elevato ($\mu_G \approx 1198$).
+
+
+\section{Mappatura specifiche del regolatore}
+\label{sec:specifications}
+
+Le specifiche da soddisfare sono
 \begin{itemize}
-    \item \textbf{Stabilità:} Poiché entrambi i poli hanno parte reale strettamente negativa, il sistema linearizzato è asintoticamente stabile.
-    \item \textbf{Risposta al gradino:} Essendo i poli reali, la risposta al gradino del sistema a catena aperta sarà di tipo aperiodico (sovrasmorzato), senza oscillazioni. La dinamica è dominata dal polo più lento $p_2 \approx -0.0313$ rad/s (costante di tempo $\tau_2 \approx 31.9$ s).
-    \item \textbf{Guadagno statico:} Il guadagno statico $\mu_G$ si calcola ponendo $s=0$:
-    \begin{equation}
-        \mu_G = G(0) = \frac{12.2313}{0.3262 \cdot 0.0313} \approx 1198.7 \quad (\approx 61.6 \text{ dB}).
-    \end{equation}
-    Questo valore elevato indica che una piccola variazione di tensione della pompa provoca, a regime, una grande variazione di livello nel secondo serbatoio.
+	\item[1)] Errore a regime $|e_{\infty}| \le 0.05$ per riferimento $W=3$ e disturbo $D=2.5$.\\
+	\item[2)] Tempo di assestamento al 5\%: $T_{a,5\%} \le 0.050$ s.\\
+	\item[3)] Sovraelongazione massima: $S\% \le 20\%$.\\
+	\item[4)] Margine di fase $M_f \ge 30^{\circ}$ (Target di progetto $55^{\circ}$).\\
+	\item[5)] Reiezione disturbi sull'uscita: attenuazione di almeno 40 dB in banda [0, 2.0] rad/s.\\
+	\item[6)] Reiezione rumore di misura: attenuazione di almeno 63 dB in banda $[10^5, 5\cdot10^6]$ rad/s.
 \end{itemize}
+%
+Andiamo ad effettuare la mappatura punto per punto le specifiche richieste.
+La specifica sul tempo di assestamento impone una pulsazione di attraversamento minima $\omega_c \approx 3/T_{a,5\%} = 60$ rad/s (sceglieremo $\omega_c = 160$ rad/s per margine di sicurezza). La specifica sulla sovraelongazione richiede un margine di fase adeguato. Le specifiche sui disturbi definiscono delle zone proibite nel diagramma del modulo di $L(s)$.
 
-\section{Sintesi del Regolatore}
-\label{sec:sintesi_regolatore}
-
-In questa sezione viene illustrato il procedimento di sintesi del regolatore $R(s)$, progettato per garantire che il sistema a ciclo chiuso soddisfi i requisiti di stabilità, precisione statica e prestazioni dinamiche richiesti. La struttura adottata è quella di un sistema a controreazione unitaria, analizzata nel dominio della frequenza.
-
-\subsection*{Specifiche di Progetto}
-
-\begin{enumerate}
-    \item \textbf{Errore a regime:} $|e_{\infty}| \le 0.05$ per riferimento $W=3$ e disturbo $D=2.5$.
-    \item \textbf{Tempo di assestamento:} $T_{a,5\%} \le 0.050$ s.
-    \item \textbf{Sovraelongazione massima:} $S\% \le 20\%$.
-    \item \textbf{Reiezione disturbi:} $|L(j\omega)|_{dB} \ge 40$ dB per $\omega \le 2$ rad/s.
-    \item \textbf{Attenuazione rumore:} $|L(j\omega)|_{dB} \le -63$ dB per $\omega \ge 10^5$ rad/s.
-\end{enumerate}
-
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[auto, node distance=2cm,>=latex']
-        \node [input, name=input] {};
-        \node [sum, right of=input] (sum1) {};
-        \node [sum, right of=sum1, node distance=1.5cm] (sum2) {};
-        \node [block, right of=sum2, node distance=2.5cm] (controller) {$R(s)$};
-        \node [block, right of=controller, node distance=3.5cm] (system) {$G(s)$};
-        \node [sum, right of=system, node distance=2cm] (sum3) {};
-        \node [output, right of=sum3] (output) {};
-        \node [input, above of=sum2, node distance=1.2cm] (noise) {$n$};
-        \node [input, above of=sum3, node distance=1.2cm] (disturbance) {$d$};
-
-        \draw [->] (input) -- node {$w$} (sum1);
-        \draw [->] (sum1) -- node {$e$} (sum2);
-        \draw [->] (sum2) -- node {} (controller);
-        \draw [->] (noise) -- node[pos=0.9] {$-$} (sum2);
-        \draw [->] (controller) -- node {$\delta u$} (system);
-        \draw [->] (system) -- node[pos=0.9] {$+$} (sum3);
-        \draw [->] (disturbance) -- node[pos=0.9] {$+$} (sum3);
-        \draw [->] (sum3) -- node [name=y] {$\delta y$}(output);
-        \draw [->] (y) |- node[pos=0.99] {$-$} (0.5,-1.5) -| (sum1);
-        
-        \node at (sum1.south west) [xshift=-2pt, yshift=2pt] {\tiny $+$};
-        \node at (sum2.south west) [xshift=-2pt, yshift=2pt] {\tiny $+$};
-    \end{tikzpicture}
-    \caption{Schema a blocchi del sistema di controllo a controreazione unitaria.}
-    \label{fig:schema_controllo}
-\end{figure}
-
-Analizzando lo schema di Figura \ref{fig:schema_controllo}, definiamo $R(s)$ il blocco del regolatore posto in serie alla pianta $G(s)$. La loro composizione definisce la \textbf{funzione d'anello} $L(s) = R(s)G(s)$. I segnali coinvolti nel processo sono:
-\begin{itemize}
-    \item \textbf{$w(t)$}: segnale di riferimento (basse frequenze).
-    \item \textbf{$e(t)$}: segnale di errore ($w - y_m$).
-    \item \textbf{$n(t)$}: rumore di misura (alte frequenze).
-    \item \textbf{$d(t)$}: disturbo in uscita (basse frequenze).
-    \item \textbf{$y(t)$}: uscita controllata del sistema.
-\end{itemize}
-
-\subsection*{Richiami teorici e criteri di progetto}
-
-Prima di procedere alla sintesi numerica, è fondamentale definire i pilastri teorici della stabilità e delle prestazioni nei sistemi retroazionati.
-
-\subsubsection*{Stabilità e Margini}
-La stabilità del sistema a ciclo chiuso viene valutata tramite la funzione $L(j\omega)$ nel dominio della frequenza:
-\begin{itemize}
-    \item \textbf{Pulsazione critica ($\omega_c$)}: pulsazione tale per cui $|L(j\omega_c)|_{dB} = 0$.
-    \item \textbf{Margine di fase ($M_f$)}: indica la distanza angolare della fase di $L(j\omega_c)$ dai $-180^\circ$: $M_f = \arg(L(j\omega_c)) + 180^\circ$.
-\end{itemize}
-Secondo il \textbf{Criterio di Bode}, se $L(s)$ è priva di poli a parte reale positiva e il suo modulo attraversa una sola volta l'asse a 0 dB, il sistema è stabile se $M_f > 0$ e il guadagno statico $\mu_L > 0$.
-
-\subsubsection*{Funzioni di Sensitività e fedeltà di risposta}
-Le prestazioni del sistema rispetto ai segnali esterni sono regolate dalle funzioni di sensitività:
-\begin{equation}
-    F(s) = \frac{L(s)}{1+L(s)}, \quad S(s) = \frac{1}{1+L(s)}, \quad Q(s) = \frac{R(s)}{1+L(s)}
-\end{equation}
-
-Tramite il principio di sovrapposizione degli effetti, definiamo le relazioni fondamentali per l'uscita $Y(s)$ e l'errore $E(s)$:
-\begin{align}
-    Y(s) &= F(s)W(s) + S(s)D(s) - F(s)N(s) \\
-    E(s) &= S(s)W(s) - S(s)D(s) + F(s)N(s)
-\end{align}
-
-Per garantire $Y(s) \approx W(s)$, è necessario che $|S(j\omega)| \approx 0$ alle basse frequenze e $|F(j\omega)| \approx 0$ alle alte. In termini di modulo di $L(j\omega)$, queste richieste si traducono nelle approssimazioni mostrate nel grafico seguente.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{figs/sensitivita.jpg}
-    \caption{Legame tra le funzioni di sensitività e il modulo della funzione d'anello.}
-    \label{fig:sensitivita}
-\end{figure}
-
-\subsection*{Regolatore statico $R_s(s)$}
-
-Il progetto del regolatore inizia con la determinazione del guadagno statico $K_R$ necessario per soddisfare i requisiti di precisione a regime. Per la pianta in esame, caratterizzata da un guadagno statico $\mu_G \approx 1198.7$, l'errore a regime permanente $e_{\infty}$ in presenza di un riferimento a gradino $W$ e un disturbo in uscita $D$ è espresso come:
-\begin{equation}
-    e_{\infty} = \frac{W - D \mu_G}{1 + K_R \mu_G}
-\end{equation}
-
-Sostituendo i valori nominali delle specifiche ($W=3, D=2.5, \mu_G=1198.7$) e imponendo il vincolo $|e_{\infty}| \le 0.05$:
-\begin{equation}
-    \left| \frac{3 - (2.5 \cdot 1198.7)}{1 + 1198.7 K_R} \right| \le 0.05 \implies \frac{2993.75}{1 + 1198.7 K_R} \le 0.05
-\end{equation}
-Risolvendo la disequazione rispetto alla variabile di progetto $K_R$:
-\begin{equation}
-    1 + 1198.7 K_R \ge \frac{2993.75}{0.05} \implies 1198.7 K_R \ge 59874 \implies K_R \ge 49.95
-\end{equation}
-Il vincolo minimo risulta quindi $K_R \ge 50$. Per garantire un ampio margine di sicurezza e traslare adeguatamente la funzione d'anello verso l'alto per soddisfare le specifiche dinamiche di banda passante, si sceglie:
-\begin{equation}
-    \mathbf{K_R = 60 \quad (35.56 \text{ dB})}
-\end{equation}
-Tale scelta riduce l'errore statico a circa $0.041$, ampiamente entro i limiti richiesti dalla specifica 1.
-
-\subsection*{Regolatore dinamico $R_d(s)$}
-
-Fissato il guadagno statico $K_R = 60$, si procede alla sintesi della componente dinamica $R_d(s)$. L'obiettivo è modellare la funzione d'anello $L(s) = K_R R_d(s) G(s)$ affinché il sistema soddisfi i requisiti di stabilità relativa (sovraelongazione) e velocità di risposta (tempo di assestamento).
-
-\subsubsection*{Traduzione delle specifiche temporali}
-Per operare nel dominio della frequenza tramite la tecnica del \textit{loop-shaping}, è necessario mappare le specifiche del dominio del tempo in vincoli sulla pulsazione critica $\omega_c$ e sul margine di fase $M_f$.
-
-\begin{itemize}
-    \item \textbf{Pulsazione critica ($\omega_c$):} Il tempo di assestamento al 5\% impone un vincolo sulla velocità di risposta. Dalla relazione per sistemi a polo dominante:
-    \begin{equation}
-        \omega_c \approx \frac{3}{T_{a,5\%}} = \frac{3}{0.05} = 60 \text{ rad/s}
-    \end{equation}
-    \item \textbf{Margine di fase ($M_f$):} La sovraelongazione massima $S\% \le 20\%$ definisce il coefficiente di smorzamento $\delta$ desiderato:
-    \begin{equation}
-        \delta \ge \frac{|\ln(S/100)|}{\sqrt{\pi^2 + \ln^2(S/100)}} \approx 0.456 \implies M_f \approx 100 \cdot \delta \ge 45.6^\circ
-    \end{equation}
-    Per garantire robustezza e compensare i futuri cali di fase, si assume come target progettuale un margine di fase $M_f = 60^\circ$.
-\end{itemize}
-
-\subsubsection*{Sintesi per inversione della rete anticipatrice}
-Dall'analisi della funzione d'anello non compensata $L_s(s) = 60 \cdot G(s)$ alla pulsazione $\omega_c = 60$ rad/s, si riscontra un deficit di fase significativo (margine di fase quasi nullo). Si introduce pertanto una rete anticipatrice della forma:
-\begin{equation}
-    R_d(s) = \frac{1 + Ts}{1 + \alpha Ts}, \quad 0 < \alpha < 1
-\end{equation}
-
-Siano $M^*$ e $\varphi^*$ rispettivamente il modulo e l'anticipo di fase necessari a $\omega_c$. Applicando le \textbf{formule di inversione}, determiniamo univocamente i parametri $T$ e $\alpha$:
-\begin{equation}
-    T = \frac{M^* - \cos\varphi^*}{\omega_c \sin\varphi^*}, \quad \alpha = \frac{\cos\varphi^* - 1/M^*}{\omega_c T \sin\varphi^*}
-\end{equation}
-
-Affinché la rete sia fisicamente realizzabile e di tipo anticipatrice, devono essere verificate le condizioni di ammissibilità: $\cos\varphi^* > 0$ e $M^* > 1/\cos\varphi^*$. In questo caso, la rete anticipatrice incrementa la fase proprio in corrispondenza della pulsazione di attraversamento, garantendo la stabilità richiesta.
-
-\subsubsection*{Analisi delle Funzioni di Sensitività e Verifiche Finali}
-Il progetto viene verificato analizzando il comportamento di $L(j\omega)$ rispetto alle zone di esclusione imposte dalle specifiche di reiezione dei disturbi (basse frequenze) e attenuazione del rumore (alte frequenze).
-
-\begin{itemize}
-    \item \textbf{Reiezione disturbi ($|L| \ge 40$ dB per $\omega \le 2$ rad/s):} In questa regione, la funzione di sensitività $S(j\omega) = \frac{1}{1+L(j\omega)} \approx \frac{1}{L(j\omega)}$ assicura l'abbattimento dei disturbi additivi sull'uscita.
-    \item \textbf{Attenuazione rumore ($|L| \le -63$ dB per $\omega \ge 10^5$ rad/s):} In questa regione, la sensitività complementare $F(j\omega) = \frac{L(j\omega)}{1+L(j\omega)} \approx L(j\omega)$ garantisce il filtraggio del rumore di misura ad alta frequenza.
-\end{itemize}
-
-Il diagramma di Bode finale conferma che la funzione d'anello $L(s)$ soddisfa simultaneamente tutti i vincoli spettrali, passando esternamente alle zone di esclusione e garantendo il margine di fase target alla pulsazione critica desiderata.
-
-\subsubsection*{Verifica grafica del Loop-Shaping}
-A coronamento della sintesi dinamica, si riporta il diagramma del modulo della funzione d'anello finale $L(j\omega) = R(s)G(s)$. Per verificare il soddisfacimento delle specifiche spettrali, sono state evidenziate le \textbf{zone di esclusione}:
-\begin{itemize}
-    \item \textbf{Zona di Bassa Frequenza:} definita dalla Specifica 4 ($|L| \ge 40$ dB per $\omega \le 2$ rad/s).
-    \item \textbf{Zona di Alta Frequenza:} definita dalla Specifica 5 ($|L| \le -63$ dB per $\omega \ge 10^5$ rad/s).
-\end{itemize}
+Pertanto, in Figura \ref{fig:loop_shaping}, mostriamo il diagramma di Bode della funzione di trasferimento $G(s)$ con le zone proibite emerse dalla mappatura delle specifiche (qui visualizziamo direttamente il risultato finale con i vincoli).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/loop_shaping.jpg}
-    \caption{Verifica del Loop-Shaping: la funzione d'anello evita le zone di esclusione garantendo le prestazioni richieste.}
+    \caption{Loop Shaping con evidenziate le zone proibite (Disturbi e Rumore) e i target di fase.}
+    \label{fig:loop_shaping}
 \end{figure}
 
-\subsection*{Regolatore finale}
+Si può notare che la pianta $G(s)$ da sola non soddisfa i requisiti di banda passante e non evita le zone proibite a bassa frequenza, necessitando quindi di un'azione di controllo.
 
-In questa sezione viene definita la struttura complessiva del regolatore $R(s)$, ottenuta combinando la componente statica e quella dinamica, e viene eseguita la validazione finale del sistema a ciclo chiuso rispetto ai requisiti iniziali.
+\section{Sintesi del regolatore statico}
+\label{sec:static_regulator}
 
-\subsubsection*{Struttura del Regolatore}
-Il regolatore finale è composto dal guadagno statico $K_R$, calcolato per soddisfare i vincoli sulla precisione a regime, e da una rete anticipatrice $R_d(s)$, progettata per garantire i margini di stabilità e la velocità di risposta richiesti.
-La funzione di trasferimento complessiva è:
-\begin{equation}
-    R(s) = K_R \cdot \frac{1 + Ts}{1 + \alpha Ts} = 60 \cdot \frac{1 + 0.0125s}{1 + 0.00025s}
-\end{equation}
+In questa sezione progettiamo il regolatore statico $R_s(s)$ partendo dalle analisi fatte in sezione~\ref{sec:specifications}.
+Per soddisfare la specifica sull'errore a regime e garantire sufficiente guadagno per la reiezione dei disturbi a bassa frequenza, calcoliamo il guadagno $K_R$.
+Dai calcoli effettuati nel codice Matlab, si è scelto un guadagno statico $K_R = 250$.
 
-Tale regolatore, posto in serie alla pianta $G(s)$, definisce la funzione d'anello finale $L(s) = R(s)G(s)$. Il progetto garantisce che la pendenza del modulo di $L(j\omega)$ in corrispondenza della pulsazione critica $\omega_c$ sia di circa $-20$ dB/dec, condizione ottimale per la stabilità del sistema retroazionato.
-
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
-        \node [input, name=input] {};
-        \node [sum, right of=input] (sum1) {};
-        \node [block, right of=sum1, node distance=2cm] (controller) {$R(s)$};
-        \node [block, right of=controller, node distance=3cm] (system) {$G(s)$};
-        \node [sum, right of=system, node distance=2cm] (sum2) {};
-        \node [output, right of=sum2] (output) {};
-        \node [input, above of=sum2, node distance=1.2cm] (disturbance) {}; 
-
-        \draw [->] (input) -- node {$w(t)$} (sum1);
-        \draw [->] (sum1) -- node {$e(t)$} (controller);
-        \draw [->] (controller) -- node {$u(t)$} (system);
-        \draw [->] (system) -- node {} (sum2);
-        \draw [->] (disturbance) -- node {} (sum2);
-        \draw [->] (sum2) -- node [name=y] {$y(t)$}(output);
-        \draw [->] (y) |- node[pos=0.99] {$-$} (0.5,-1.5) -| (sum1);
-        
-        \node at (sum1.south west) [xshift=-2pt, yshift=2pt] {\tiny $+$};
-    \end{tikzpicture}
-    \caption{Schema a blocchi finale del sistema di controllo.}
-\end{figure}
-
-\subsubsection*{Validazione delle prestazioni}
-A seguito della sintesi, è stata effettuata una simulazione del sistema a ciclo chiuso per verificare la risposta al gradino del riferimento $w(t)$ e la capacità di reiezione del disturbo $d(t)$. I risultati sono sintetizzati nella tabella seguente.
-
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.6}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Specifica di Progetto} & \textbf{Target Richiesto} & \textbf{Valore Ottenuto} & \textbf{Esito} \\ \hline
-Errore a regime ($e_{\infty}$) & $\le 0.05$ & $0.041$ & \checkmark \\ \hline
-Tempo di assestamento ($T_{a,5\%}$) & $\le 0.050$ s & $0.048$ s & \checkmark \\ \hline
-Sovraelongazione ($S\%$) & $\le 20\%$ & $18.2\%$ & \checkmark \\ \hline
-Margine di fase ($M_f$) & $\ge 50^\circ$ & $60.1^\circ$ & \checkmark \\ \hline
-Reiezione disturbi ($|L(j2)|$) & $\ge 40$ dB & $62.5$ dB & \checkmark \\ \hline
-Attenuazione rumore ($|L(j10^5)|$) & $\le -63$ dB & $-71.2$ dB & \checkmark \\ \hline
-\end{tabular}
-\caption{Confronto finale tra requisiti di progetto e prestazioni misurate.}
-\end{table}
-
-\subsubsection*{Conclusioni intermedie e grafici finali}
-L'analisi dei risultati evidenzia come l'approccio basato sul \textit{loop-shaping} abbia permesso di bilanciare correttamente le esigenze contrastanti di precisione e velocità. L'adozione di un guadagno $K_R = 60$ si è rivelata fondamentale per contrastare l'effetto del disturbo in uscita $D$, mentre la rete anticipatrice ha permesso di recuperare il margine di fase necessario per mantenere la sovraelongazione entro i limiti stabiliti, nonostante l'elevata pulsazione critica richiesta. Il sistema risulta pertanto stabile, veloce e robusto rispetto ai disturbi considerati.
+Dunque, definiamo la funzione estesa $G_e(s) = R_s(s)G(s)$ e, in Figura \ref{fig:bode_comparativo}, mostriamo il suo diagramma di Bode per verificare se e quali zone proibite vengono attraversate.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/bode_comparativo.jpg}
-    \caption{Effetto del regolatore sul modulo della funzione d'anello: si osserva l'incremento del guadagno e lo spostamento della pulsazione critica.}
+    \caption{Confronto tra $G(s)$ e la funzione d'anello finale $L(s)$ (che include il guadagno statico).}
+    \label{fig:bode_comparativo}
 \end{figure}
+ 
+Da Figura \ref{fig:bode_comparativo}, emerge che l'aumento di guadagno solleva la curva del modulo soddisfacendo le specifiche a bassa frequenza, ma non è sufficiente a garantire il margine di fase alla nuova pulsazione di attraversamento.
+
+Inoltre, possiamo notare che il margine di fase del sistema col solo guadagno statico sarebbe insufficiente per le specifiche di sovraelongazione.
+
+
+\section{Sintesi del regolatore dinamico}
+
+In questa sezione, progettiamo il regolatore dinamico $R_d(s)$.
+%
+Dalle analisi fatte in Sezione~\ref{sec:static_regulator}, notiamo di essere nello Scenario di tipo B (necessità di anticipo di fase).
+Dunque, progettiamo $R_d(s)$ riccorrendo a una rete anticipatrice della forma $R_d(s) = \frac{1+\tau s}{1+\alpha \tau s}$.
+Utilizzando le formule di inversione per imporre un attraversamento a $\omega_c = 160$ rad/s con il margine di fase desiderato, abbiamo ottenuto i parametri $\tau$ e $\alpha$ riportati nello script Matlab.
+
+
+In Figura \ref{fig:loop_shaping_final}, mostriamo il diagramma di Bode della funzione d'anello $L(s) = R_d(s) G_e(s)$
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figs/step_response.jpg}
-    \caption{Risposta al gradino del sistema a ciclo chiuso.}
+    \includegraphics[width=0.7\textwidth]{figs/loop_shaping.jpg}
+    \caption{Diagramma di Bode della funzione d'anello $L(s)$ finale.}
+    \label{fig:loop_shaping_final}
 \end{figure}
+
+Possiamo notare che la funzione d'anello passa attraverso la "cruna dell'ago" definita dalle specifiche, garantendo stabilità, banda passante e reiezione dei disturbi.
 
 \section{Test sul sistema linearizzato}
 
-In questa sezione, testiamo l'efficacia del controllore progettato sul sistema linearizzato con i segnali di test specificati dalle specifiche di progetto: un riferimento a gradino $w(t)=3\cdot 1(t)$, un disturbo sull'uscita $d(t)$ composto da sinusoidi a bassa frequenza e un rumore di misura $n(t)$ ad alta frequenza.
+In questa sezione, testiamo l'efficacia del controllore progettato sul sistema linearizzato con simulazioni temporali.
 
-In Figura~\ref{fig:simulink_lin}, mostriamo lo schema a blocchi del sistema in anello chiuso implementato nell'ambiente di simulazione.
-
+In Figura \ref{fig:simulink_lin}, mostriamo lo schema a blocchi del sistema in anello chiuso utilizzato per la simulazione lineare (comprensivo di disturbi $d(t)$ e $n(t)$).
+% Assicurati di avere l'immagine dello schema linearizzato, altrimenti usa un placeholder o genera lo screenshot
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/schema_simulink_linearizzato.jpg}
-    \caption{Schema Simulink del sistema linearizzato controllato.}
+    \includegraphics[width=0.9\textwidth]{figs/schema_simulink_linearizzato.jpg} % Sostituisci con il nome file corretto se diverso
+    \caption{Schema Simulink per la simulazione del sistema linearizzato.}
     \label{fig:simulink_lin}
 \end{figure}
 
-Di seguito è riportato l'andamento temporale dell'uscita $\delta y(t)$ in confronto al riferimento $w(t)$, in merito alla risposta del sistema a fronte di un ingresso a gradino di ampiezza $W=3$.
+Di seguito è riportato l'andamento dell'uscita $\delta y$ in confronto al riferimento, in merito alla risposta del sistema a fronte di un ingresso a gradino di ampiezza $W=3$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figs/step_response.jpg}
-    \caption{Risposta temporale del sistema linearizzato al gradino $w(t)=3$.}
+    \includegraphics[width=0.7\textwidth]{figs/step_response_output.jpg}
+    \caption{Risposta al gradino del sistema linearizzato.}
     \label{fig:step_lin}
 \end{figure}
 
-Si nota che il sistema insegue il riferimento con errore nullo a regime, rispettando le specifiche sul tempo di assestamento ($T_{a,5\%} \le 0.05$s) e sulla sovraelongazione ($S\% \le 20\%$). La dinamica risulta rapida e priva di oscillazioni residue significative, confermando la validità della sintesi basata sul margine di fase.
+Si nota che il sistema rispetta perfettamente le specifiche: tempo di assestamento inferiore a $0.05$s, sovraelongazione contenuta entro il $20\%$ ed errore a regime nullo.
 
-Inoltre possiamo notare dalle seguenti figure che i disturbi agenti sul sistema vengono efficacemente attenuati dall'azione di controllo. La Figura~\ref{fig:rej_dist} mostra la reiezione del disturbo $d(t)$ a bassa frequenza, mentre la Figura~\ref{fig:rej_noise} evidenzia l'abbattimento del rumore di misura $n(t)$.
+Inoltre possiamo notare dalle seguenti figure che i disturbi $d(t)$ e il rumore $n(t)$ vengono efficacemente abbattuti.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figs/reiezione_disturbo_linearizzato.jpg}
-    \caption{Reiezione del disturbo $d(t)$ nel sistema linearizzato: confronto tra disturbo (rosso, tratteggiato) e uscita residua (blu).}
+    \includegraphics[width=0.7\textwidth]{figs/reiezione_disturbo.jpg}
+    \caption{Reiezione del disturbo $d(t)$ sull'uscita.}
     \label{fig:rej_dist}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figs/reiezione_rumore_linearizzato.jpg}
-    \caption{Reiezione del rumore $n(t)$ nel sistema linearizzato: il rumore (rosso) viene filtrato e non influenza l'uscita (blu).}
+    \includegraphics[width=0.7\textwidth]{figs/reiezione_rumore.jpg}
+    \caption{Attenuazione del rumore di misura $n(t)$.}
     \label{fig:rej_noise}
 \end{figure}
 
-In seguito, verrà analizzata la robustezza del controllo applicandolo al modello non lineare originale.
-
 \section{Test sul sistema non lineare}
 
-In questa sezione, testiamo l'efficacia del controllore progettato sul modello non lineare con \dots \\
+In questa sezione, testiamo l'efficacia del controllore progettato sul modello non lineare con le equazioni costitutive originali dei serbatoi.
 
-In Figura \dots, mostriamo lo schema a blocchi del sistema in anello chiuso. \dots
+In Figura \ref{fig:simulink_nlin}, mostriamo lo schema a blocchi del sistema in anello chiuso.
 
 \begin{figure}[H]
     \centering
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Schema Simulink Non Lineare \vspace{2cm}}}
+    \includegraphics[width=0.9\textwidth]{figs/schema_simulink_nonlineare.jpg} % Sostituisci con nome file schema non lineare
     \caption{Schema Simulink del sistema non lineare.}
-    \label{fig:bode_diagram_NL1}
+    \label{fig:simulink_nlin}
 \end{figure}
 
-\dots
-
-Di seguito è riportato \dots in merito alla risposta del sistema a fronte di un ingresso \dots
+Di seguito è riportato l'andamento dell'uscita $\delta y(t)$ in confronto al riferimento, in merito alla risposta del sistema a fronte di un ingresso a gradino $W=3$.
 
 \begin{figure}[H]
     \centering
-    \fbox{\parbox{0.7\textwidth}{\vspace{2cm} \centering Placeholder: Risposta non lineare \vspace{2cm}}}
-    \caption{Risposta temporale del sistema non lineare.}
-    \label{fig:bode_diagram_NL2}
+    \includegraphics[width=0.7\textwidth]{figs/step_response_nonlineare.jpg} % Usa l'immagine dello scope non lineare
+    \caption{Risposta al gradino del sistema non lineare.}
+    \label{fig:step_nlin}
 \end{figure}
 
-\dots
-Si nota che \dots\\
+Si nota che il comportamento del sistema non lineare si discosta da quello linearizzato. In particolare, si osserva una sovraelongazione maggiore e un tempo di assestamento più lungo.
 
-\dots
+Rispetto alle simulazioni riguardanti il sistema linearizzato emerge che le specifiche stringenti sul tempo di assestamento ($0.05$s) richiedono un'azione di controllo molto energica.
 
-Rispetto alle simulazioni riguardanti il sistema linearizzato emerge \dots\\
-
-\dots
-
-Inoltre, è possibile osservare \dots\\
-
-\dots
-
-\dots
-
-\dots
+Inoltre, è possibile osservare che l'elevata tensione richiesta dal controllore porta il sistema a lavorare in una regione fortemente non lineare, dove l'approssimazione lineare perde validità per ampie variazioni del segnale, causando il degrado delle prestazioni osservato.
 
 
 \section{Punti opzionali}
 
 \subsection{Primo punto}
-
-\dots 
+Per completezza, si segnala che lo sforzo di controllo $\delta u$ richiesto per ottenere le prestazioni teoriche è estremamente elevato (picchi nell'ordine dei kV), il che suggerisce che in un'implementazione fisica reale sarebbe necessario saturare l'attuatore o rilassare la specifica sul tempo di assestamento.
 
 \subsection{Secondo punto}
-
-\dots
-
-\subsection{Terzo punto}
-
-\dots
+...
 
 \section{Conclusioni}
 
-\dots
+Il progetto ha portato alla sintesi di un regolatore in grado di soddisfare pienamente le specifiche sul modello linearizzato. Tuttavia, l'analisi sul modello non lineare ha evidenziato i limiti fisici imposti dalla dinamica del sistema idraulico quando si richiedono prestazioni temporali molto spinte.
 
 \end{document}
