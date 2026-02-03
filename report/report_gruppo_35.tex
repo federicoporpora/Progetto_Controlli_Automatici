@@ -396,7 +396,7 @@ Per rispondere alla richiesta di analizzare la convergenza del sistema, abbiamo 
 %
 L'obiettivo è verificare se, partendo da stati perturbati (serbatoi vuoti o troppo pieni), il controllore riesce a riportare il sistema all'equilibrio $x_e$ senza incorrere in instabilità o violazioni fisiche.
 
-Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_conditions}), il sistema dimostra una notevole robustezza. Per tutte le condizioni iniziali testate, anche quelle estreme (serbatoi quasi vuoti o molto pieni), l'uscita del sistema converge asintoticamente al valore di equilibrio $a_{2,eq}$ senza mostrare comportamenti divergenti.
+Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_conditions}), il sistema dimostra una notevole robustezza. Per tutte le condizioni iniziali testate, anche quelle estreme, l'uscita del sistema converge asintoticamente all'equilibrio.
 
 \begin{figure}[H]
     \centering
@@ -404,13 +404,13 @@ Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_1.jpg}
-        \caption{Test 1: $a_1$ quasi vuoto.}
+        \caption{Test 1: $a_1(0)=0.005, a_2(0)=3.67$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_2.jpg}
-        \caption{Test 2: $a_1$ pieno.}
+        \caption{Test 2: $a_1(0)=0.10, a_2(0)=3.67$.}
     \end{subfigure}
     
     \vspace{0.5em} % Spazio tra le righe
@@ -419,13 +419,13 @@ Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_3.jpg}
-        \caption{Test 3: $a_2$ basso.}
+        \caption{Test 3: $a_1(0)=0.0235, a_2(0)=1.0$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_4.jpg}
-        \caption{Test 4: $a_2$ alto.}
+        \caption{Test 4: $a_1(0)=0.0235, a_2(0)=5.0$.}
     \end{subfigure}
     
     \vspace{0.5em}
@@ -434,13 +434,13 @@ Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_5.jpg}
-        \caption{Test 5: Entrambi bassi.}
+        \caption{Test 5: $a_1(0)=0.01, a_2(0)=2.0$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_6.jpg}
-        \caption{Test 6: Entrambi alti.}
+        \caption{Test 6: $a_1(0)=0.05, a_2(0)=5.0$.}
     \end{subfigure}
     
     \vspace{0.5em}
@@ -449,16 +449,16 @@ Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_7.jpg}
-        \caption{Test 7: $a_1$ vuoto, $a_2$ pieno.}
+        \caption{Test 7: $a_1(0)=0.005, a_2(0)=6.0$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figs/cond_ini_8.jpg}
-        \caption{Test 8: $a_1$ pieno, $a_2$ vuoto.}
+        \caption{Test 8: $a_1(0)=0.10, a_2(0)=1.0$.}
     \end{subfigure}
     
-    \caption{Risposta del sistema non lineare per diverse condizioni iniziali $a_1(0)$ e $a_2(0)$. In tutti i casi il sistema converge all'equilibrio (linea rossa).}
+    \caption{Risposta del sistema non lineare per diverse condizioni iniziali $a_1(0)$ e $a_2(0)$. In tutti i casi il sistema converge all'origine dello spazio delle variazioni (condizione di equilibrio).}
     \label{fig:grid_initial_conditions}
 \end{figure}
 
