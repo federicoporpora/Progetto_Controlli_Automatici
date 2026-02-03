@@ -17,8 +17,9 @@
 \usepackage{amsthm}
 \usepackage{subcaption}
 \usepackage{hyperref}
-\usepackage{float}
 \usepackage{tikz}
+\usepackage{float}
+
 
 \usetikzlibrary{snakes}
 \usetikzlibrary{positioning}
@@ -31,7 +32,6 @@
     \tikzstyle{output} = [coordinate]
     \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
 
-% Dati del progetto
 \newcommand{\courseacronym}{CAT}
 \newcommand{\coursename}{Linea Guida Report\\Controlli Automatici - T}
 \newcommand{\tipology}{A}
@@ -39,7 +39,6 @@
 \newcommand{\projectname}{Controllo di due serbatoi d'acqua in cascata}
 \newcommand{\group}{35}
 
-% Titolo
 \title{ \vspace{-1in}
         \huge \strut \coursename \strut 
         \\
@@ -241,21 +240,21 @@ Si può notare che per garantire l'inseguimento del riferimento e la reiezione d
 
 In questa sezione progettiamo il regolatore statico $R_s(s)$ partendo dalle analisi fatte in sezione~\ref{sec:specifications}.
 %
-Il progetto del regolatore inizia con la determinazione del guadagno statico $K_R$ necessario per soddisfare i requisiti di precisione a regime.
+Il progetto del regolatore inizia con la determinazione del guadagno statico $\mu_s$ necessario per soddisfare i requisiti di precisione a regime.
 %
 Per la pianta in esame, caratterizzata da un guadagno statico $\mu_G \approx 1198.7$, l'errore a regime permanente $e_{\infty}$ in presenza di un riferimento a gradino $W$ e un disturbo in uscita $D$ è espresso come:
 %
 \begin{equation}
-    e_{\infty} = \frac{W - D \mu_G}{1 + K_R \mu_G}
+    e_{\infty} = \frac{W - D \mu_G}{1 + \mu_s \mu_G}
 \end{equation}
 %
 Per soddisfare simultaneamente la specifica sull'errore a regime e quella relativa all'attenuazione del disturbo d'uscita a bassa frequenza, è stato scelto un guadagno statico:
 %
 \begin{equation}
-    \mathbf{K_R = 250 \quad (47.96 \text{ dB})}
+    \mathbf{\mu_s = 250 \quad (47.96 \text{ dB})}
 \end{equation}
 
-Dunque, definiamo la funzione estesa $G_e(s) = R_s(s)G(s) = K_R G(s)$ e, in Figura \ref{fig:bode_diagram_Ge}, mostriamo il suo diagramma di Bode per verificare se e quali zone proibite vengono attraversate.
+Dunque, definiamo la funzione estesa $G_e(s) = R_s(s)G(s) = \mu_s G(s)$ e, in Figura \ref{fig:bode_diagram_Ge}, mostriamo il suo diagramma di Bode per verificare se e quali zone proibite vengono attraversate.
 
 \begin{figure}[H]
     \centering
@@ -282,7 +281,7 @@ Dunque, progettiamo $R_d(s)$ ricorrendo a una \textbf{rete anticipatrice} della 
 %
 Applicando le formule di inversione, sono stati determinati i parametri $\tau$ e $\alpha$ che garantiscono l'attraversamento a 0 dB alla frequenza desiderata con il margine di fase richiesto ($M_f \ge 55^\circ$).
 %
-Il regolatore finale $R(s) = K_R R_d(s)$ risulta quindi:
+Il regolatore finale $R(s) = \mu_s R_d(s)$ risulta quindi:
 %
 \begin{equation}
     R(s) = 250 \cdot \frac{1 + \tau s}{1 + \alpha \tau s}
@@ -351,6 +350,21 @@ Inoltre possiamo notare dalle seguenti figure che i disturbi agenti sul sistema 
     \caption{Analisi della reiezione di disturbi e rumori sul sistema linearizzato.}
 \end{figure}
 
+\subsection{Analisi dello sforzo di controllo}
+
+In aggiunta all'analisi dell'uscita, per completezza si analizza lo sforzo di controllo $\delta u$ richiesto per ottenere le prestazioni teoriche lineari.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figs/step_response_control_effort.jpg}
+    \caption{Sforzo di controllo teorico richiesto.}
+    \label{fig:control_effort}
+\end{figure}
+
+Come si evince dal grafico, per ottenere un tempo di assestamento di $0.05$s sono richiesti picchi di tensione estremamente elevati (nell'ordine dei kV).
+%
+Questo suggerisce che, in un'implementazione fisica reale, l'attuatore (pompa) andrebbe in saturazione molto prima di raggiungere tali valori. La saturazione limiterebbe l'energia fornita al sistema, rallentando ulteriormente la risposta rispetto al caso ideale. Per un'applicazione pratica, sarebbe necessario rilassare la specifica sul tempo di assestamento.
+
 \section{Test sul sistema non lineare}
 
 In questa sezione, testiamo l'efficacia del controllore progettato sul modello non lineare, descritto dalle equazioni differenziali originali dei serbatoi, includendo la presenza di disturbi e rumori.
@@ -404,23 +418,6 @@ Incrementando progressivamente l'ampiezza del gradino richiesto, abbiamo osserva
 \end{equation}
 %
 Per ampiezze superiori, l'azione di controllo richiesta porta allo svuotamento completo del primo serbatoio durante il transitorio (fenomeno di wind-up o saturazione fisica), causando il fallimento del controllo.
-
-\section{Punti opzionali}
-
-\subsection{Analisi sforzo di controllo}
-
-Per completezza, si analizza lo sforzo di controllo $\delta u$ richiesto per ottenere le prestazioni teoriche lineari.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{figs/step_response_control_effort.jpg}
-    \caption{Sforzo di controllo teorico richiesto.}
-    \label{fig:control_effort}
-\end{figure}
-
-Come si evince dal grafico, per ottenere un tempo di assestamento di $0.05$s sono richiesti picchi di tensione estremamente elevati (nell'ordine dei kV).
-%
-Questo suggerisce che, in un'implementazione fisica reale, l'attuatore (pompa) andrebbe in saturazione molto prima di raggiungere tali valori. La saturazione limiterebbe l'energia fornita al sistema, rallentando ulteriormente la risposta rispetto al caso ideale. Per un'applicazione pratica, sarebbe necessario rilassare la specifica sul tempo di assestamento.
 
 \section{Conclusioni}
 
