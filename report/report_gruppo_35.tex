@@ -67,7 +67,8 @@ Il progetto riguarda il controllo di due serbatoi d'acqua in cascata, la cui din
 \end{align}
 \end{subequations}
 %
-dove $a_1(t)$ e $a_2(t)$ rappresentano i livelli dei serbatoi, $V(t)$ la tensione della pompa e $k_i$ sono parametri geometrici.
+dove $a_1(t)$ e $a_2(t)$ rappresentano i livelli dei serbatoi, $V(t)$ la tensione della pompa e $k_i$ 
+sono parametri geometrici.
 
 \section{Espressione del sistema in forma di stato e calcolo del sistema linearizzato intorno ad una coppia di equilibrio}
 
@@ -127,7 +128,8 @@ dal quale, utilizzando i parametri $a_{1,eq}=0.0235$ e $a_{2,eq}=3.67$ forniti d
 Definiamo le variabili alle variazioni $\delta x$, $\delta u$ e $\delta y$ come:
 %
 \begin{align*}
-    \delta x &= x - x_e, \quad \delta u = u - u_e, \quad \delta y = y - y_e.
+    \delta x &= x - x_e, \quad \delta u = u 
+- u_e, \quad \delta y = y - y_e.
 \end{align*}
 %
 L'evoluzione del sistema espressa nelle variabili alle variazioni pu\`o essere approssimativamente descritta mediante il seguente sistema lineare:
@@ -147,7 +149,8 @@ dove le matrici $A$, $B$, $C$ e $D$ vengono calcolate come:
     A &= 
     \begin{bmatrix}
         \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} \\[1em]
-        \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2}
+        \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial 
+x_2}
     \end{bmatrix}
     =
     \begin{bmatrix}
@@ -194,10 +197,10 @@ In Figura~\ref{fig:bode_diagram_G} mostriamo il corrispondente diagramma di Bode
 Inoltre, analizzando la funzione di trasferimento, possiamo fare alcune considerazioni preliminari:
 \begin{itemize}
     \item \textbf{Stabilità:} Poiché entrambi i poli hanno parte reale strettamente negativa, il sistema linearizzato è asintoticamente stabile.
-    \item \textbf{Guadagno statico:} Il guadagno statico $\mu_G$ si calcola ponendo $s=0$:
+\item \textbf{Guadagno statico:} Il guadagno statico $\mu_G$ si calcola ponendo $s=0$:
     \begin{equation}
         \mu_G = G(0) = \frac{12.2313}{0.3262 \cdot 0.0313} \approx 1198.7 \quad (\approx 61.6 \text{ dB}).
-    \end{equation}
+\end{equation}
     Questo valore elevato indica che una piccola variazione di tensione della pompa provoca, a regime, una grande variazione di livello nel secondo serbatoio.
 \end{itemize}
 
@@ -206,26 +209,27 @@ Inoltre, analizzando la funzione di trasferimento, possiamo fare alcune consider
 
 Le specifiche da soddisfare sono:
 \begin{itemize}
-    \item[1)] \textbf{Errore a regime:} $|e_{\infty}| \le 0.05$ per riferimento $W=3$ e disturbo $D=2.5$.
+    \item[1)] \textbf{Errore a regime:} $|e_{\infty}|
+\le 0.05$ per riferimento $W=3$ e disturbo $D=2.5$.
     \item[2)] \textbf{Margine di fase:} $M_f \ge 30^\circ$ (per robustezza).
-    \item[3)] \textbf{Sovraelongazione massima:} $S\% \le 20\%$.
+\item[3)] \textbf{Sovraelongazione massima:} $S\% \le 20\%$.
     \item[4)] \textbf{Tempo di assestamento:} $T_{a,5\%} \le 0.050$ s.
-    \item[5)] \textbf{Reiezione disturbi:} $|L(j\omega)|_{dB} \ge 40$ dB per $\omega \le 2$ rad/s.
-    \item[6)] \textbf{Attenuazione rumore:} $|L(j\omega)|_{dB} \le -63$ dB per $\omega \ge 10^5$ rad/s.
+\item[5)] \textbf{Reiezione disturbi:} $|L(j\omega)|_{dB} \ge 40$ dB per $\omega \le 2$ rad/s.
+\item[6)] \textbf{Attenuazione rumore:} $|L(j\omega)|_{dB} \le -63$ dB per $\omega \ge 10^5$ rad/s.
 \end{itemize}
 %
 Andiamo ad effettuare la mappatura punto per punto delle specifiche richieste, traducendole nel dominio della frequenza per l'approccio di Loop Shaping.
 %
-Il tempo di assestamento al 5\% impone un vincolo sulla velocità di risposta e quindi sulla pulsazione critica $\omega_c$. Dalla relazione approssimata:
+Il tempo di assestamento al 5\% impone un vincolo sulla velocità di risposta e quindi sulla pulsazione critica $\omega_c$.
+Dalla relazione approssimata:
 \begin{equation}
     \omega_c \approx \frac{3}{T_{a,5\%}} = \frac{3}{0.05} = 60 \text{ rad/s}.
 \end{equation}
 Tuttavia, per garantire margini operativi, si è scelto come target in fase di progetto $\omega_c = 160$ rad/s.
 %
-La sovraelongazione massima $S\% \le 20\%$ richiede un coefficiente di smorzamento adeguato. Si assume come target progettuale un margine di fase $M_f \ge 55^\circ$, più stringente del requisito minimo di $30^\circ$.
-
+La sovraelongazione massima $S\% \le 20\%$ richiede un coefficiente di smorzamento adeguato.
+Si assume come target progettuale un margine di fase $M_f \ge 55^\circ$, più stringente del requisito minimo di $30^\circ$.
 Pertanto, in Figura \ref{fig:sensitivita}, mostriamo il legame tra le funzioni di sensitività e le zone proibite emerse dalla mappatura delle specifiche.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/sensitivita.jpg}
@@ -234,7 +238,6 @@ Pertanto, in Figura \ref{fig:sensitivita}, mostriamo il legame tra le funzioni d
 \end{figure}
 
 Si può notare che per garantire l'inseguimento del riferimento e la reiezione dei disturbi (basse frequenze), è necessario un guadagno di anello elevato, mentre per l'attenuazione del rumore (alte frequenze) il guadagno deve abbassarsi drasticamente.
-
 \section{Sintesi del regolatore statico}
 \label{sec:static_regulator}
 
@@ -254,7 +257,8 @@ Per soddisfare simultaneamente la specifica sull'errore a regime e quella relati
     \mathbf{\mu_s = 250 \quad (47.96 \text{ dB})}
 \end{equation}
 
-Dunque, definiamo la funzione estesa $G_e(s) = R_s(s)G(s) = \mu_s G(s)$ e, in Figura \ref{fig:bode_diagram_Ge}, mostriamo il suo diagramma di Bode per verificare se e quali zone proibite vengono attraversate.
+Dunque, definiamo la funzione estesa $G_e(s) = R_s(s)G(s) = \mu_s G(s)$ e, in Figura \ref{fig:bode_diagram_Ge}, mostriamo il suo diagramma di Bode 
+per verificare se e quali zone proibite vengono attraversate.
 
 \begin{figure}[H]
     \centering
@@ -266,7 +270,6 @@ Dunque, definiamo la funzione estesa $G_e(s) = R_s(s)G(s) = \mu_s G(s)$ e, in Fi
 Da Figura \ref{fig:bode_diagram_Ge}, emerge che l'adozione del solo guadagno statico permette di soddisfare le specifiche di errore a regime e reiezione disturbi a bassa frequenza.
 %
 Inoltre, possiamo notare che tale guadagno sposta la pulsazione di attraversamento verso frequenze più alte, necessario per la specifica sul tempo di assestamento, ma senza una correzione dinamica il margine di fase a tale frequenza risulterebbe insufficiente.
-
 \section{Sintesi del regolatore dinamico}
 
 In questa sezione, progettiamo il regolatore dinamico $R_d(s)$.
@@ -288,7 +291,6 @@ Il regolatore finale $R(s) = \mu_s R_d(s)$ risulta quindi:
 \end{equation}
 
 In Figura \ref{fig:loop_shaping}, mostriamo il diagramma di Bode della funzione d'anello $L(s) = R_d(s) G_e(s)$ con evidenziate le zone di esclusione.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/loop_shaping.jpg}
@@ -300,17 +302,17 @@ Possiamo notare che la funzione d'anello soddisfa simultaneamente tutti i vincol
 %
 In particolare:
 \begin{itemize}
-    \item \textbf{Reiezione disturbi:} Il guadagno elevato assicura $|L| \ge 40$ dB per $\omega \le 2$ rad/s.
-    \item \textbf{Attenuazione rumore:} La pendenza del sistema e del controllore garantiscono $|L| \le -63$ dB per $\omega \ge 10^5$ rad/s.
+    \item \textbf{Reiezione disturbi:} Il guadagno elevato assicura $|L|
+\ge 40$ dB per $\omega \le 2$ rad/s.
+    \item \textbf{Attenuazione rumore:} La pendenza del sistema e del controllore garantiscono $|L|
+\le -63$ dB per $\omega \ge 10^5$ rad/s.
     \item \textbf{Stabilità e Margini:} L'anticipo di fase introdotto dalla rete garantisce il margine di fase richiesto alla $\omega_c$ progettuale.
 \end{itemize}
 
 \section{Test sul sistema linearizzato}
 
 In questa sezione, testiamo l'efficacia del controllore progettato sul sistema linearizzato con i segnali di test specificati dalle specifiche di progetto: un riferimento a gradino $w(t)=3\cdot 1(t)$, un disturbo sull'uscita $d(t)$ composto da sinusoidi a bassa frequenza e un rumore di misura $n(t)$ ad alta frequenza.
-
 In Figura \ref{fig:simulink_lin}, mostriamo lo schema a blocchi del sistema in anello chiuso implementato nell'ambiente di simulazione.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/schema_simulink_linearizzato.jpg}
@@ -319,7 +321,6 @@ In Figura \ref{fig:simulink_lin}, mostriamo lo schema a blocchi del sistema in a
 \end{figure}
 
 Di seguito è riportato l'andamento temporale dell'uscita $\delta y(t)$ in confronto al riferimento $w(t)$, in merito alla risposta del sistema a fronte di un ingresso a gradino di ampiezza $W=3$.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/step_response_output.jpg}
@@ -330,9 +331,8 @@ Di seguito è riportato l'andamento temporale dell'uscita $\delta y(t)$ in confr
 Si nota che il sistema insegue il riferimento con errore nullo a regime, rispettando le specifiche sul tempo di assestamento ($T_{a,5\%} \le 0.05$s) e sulla sovraelongazione ($S\% \le 20\%$).
 %
 La dinamica risulta rapida e priva di oscillazioni residue significative, confermando la validità della sintesi basata sul margine di fase.
-
-Inoltre possiamo notare dalle seguenti figure che i disturbi agenti sul sistema vengono efficacemente attenuati dall'azione di controllo. La Figura~\ref{fig:rej_dist} mostra la reiezione del disturbo $d(t)$ a bassa frequenza, mentre la Figura~\ref{fig:rej_noise} evidenzia l'abbattimento del rumore di misura $n(t)$.
-
+Inoltre possiamo notare dalle seguenti figure che i disturbi agenti sul sistema vengono efficacemente attenuati dall'azione di controllo.
+La Figura~\ref{fig:rej_dist} mostra la reiezione del disturbo $d(t)$ a bassa frequenza, mentre la Figura~\ref{fig:rej_noise} evidenzia l'abbattimento del rumore di misura $n(t)$.
 \begin{figure}[H]
     \centering
     \begin{subfigure}{.49\textwidth}
@@ -352,8 +352,8 @@ Inoltre possiamo notare dalle seguenti figure che i disturbi agenti sul sistema 
 
 \subsection{Analisi dello sforzo di controllo}
 
-In aggiunta all'analisi dell'uscita, per completezza si analizza lo sforzo di controllo $\delta u$ richiesto per ottenere le prestazioni teoriche lineari.
-
+In aggiunta all'analisi dell'uscita, per completezza si analizza lo 
+sforzo di controllo $\delta u$ richiesto per ottenere le prestazioni teoriche lineari.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/step_response_control_effort.jpg}
@@ -363,14 +363,13 @@ In aggiunta all'analisi dell'uscita, per completezza si analizza lo sforzo di co
 
 Come si evince dal grafico, per ottenere un tempo di assestamento di $0.05$s sono richiesti picchi di tensione estremamente elevati (nell'ordine dei kV).
 %
-Questo suggerisce che, in un'implementazione fisica reale, l'attuatore (pompa) andrebbe in saturazione molto prima di raggiungere tali valori. La saturazione limiterebbe l'energia fornita al sistema, rallentando ulteriormente la risposta rispetto al caso ideale. Per un'applicazione pratica, sarebbe necessario rilassare la specifica sul tempo di assestamento.
-
+Questo suggerisce che, in un'implementazione fisica reale, l'attuatore (pompa) andrebbe in saturazione molto prima di raggiungere tali valori.
+La saturazione limiterebbe l'energia fornita al sistema, rallentando ulteriormente la risposta rispetto al caso ideale.
+Per un'applicazione pratica, sarebbe necessario rilassare la specifica sul tempo di assestamento.
 \section{Test sul sistema non lineare}
 
 In questa sezione, testiamo l'efficacia del controllore progettato sul modello non lineare, descritto dalle equazioni differenziali originali dei serbatoi, includendo la presenza di disturbi e rumori.
-
 In Figura \ref{fig:simulink_nlin}, mostriamo lo schema a blocchi del sistema in anello chiuso utilizzato per la simulazione non lineare.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figs/schema_simulink_nonlineare.jpg}
@@ -379,10 +378,8 @@ In Figura \ref{fig:simulink_nlin}, mostriamo lo schema a blocchi del sistema in 
 \end{figure}
 
 Di seguito è riportato l'andamento temporale dell'uscita $\delta y(t)$ a fronte di un ingresso a gradino di ampiezza $W=3$, disturbi $d(t)$ e rumore $n(t)$.
-
 \begin{figure}[H]
     \centering
-    % TODO: INSERIRE LO SCREENSHOT DELLO SCOPE SIMULINK QUI
     \includegraphics[width=0.7\textwidth]{figs/step_response_nonlineare.jpg}
     \caption{Risposta temporale del sistema non lineare con disturbi e rumori.}
     \label{fig:step_nlin}
@@ -390,34 +387,90 @@ Di seguito è riportato l'andamento temporale dell'uscita $\delta y(t)$ a fronte
 
 Si nota che il comportamento del sistema non lineare si discosta significativamente da quello linearizzato.
 %
-Rispetto alle simulazioni riguardanti il sistema linearizzato emerge una sovraelongazione maggiore dovuta alle non linearità. Tuttavia, il sistema riesce a inseguire il riferimento e a mantenere la stabilità nonostante la presenza di forti disturbi esterni.
-
+Rispetto alle simulazioni riguardanti il sistema linearizzato emerge una sovraelongazione maggiore dovuta alle non linearità.
+Tuttavia, il sistema riesce a inseguire il riferimento e a mantenere la stabilità nonostante la presenza di forti disturbi esterni.
 Inoltre, è possibile osservare che il sistema, pur rimanendo stabile, fatica a seguire la dinamica rapida imposta a causa dei limiti fisici non modellati nella linearizzazione.
-
 \subsection{Esplorazione delle condizioni iniziali}
 
 Per rispondere alla richiesta di analizzare la convergenza del sistema, abbiamo effettuato dei test variando le condizioni iniziali dei livelli dei serbatoi $a_1(0)$ e $a_2(0)$ nel modello Simulink, mantenendo il riferimento a variazione nulla ($w(t)=0$).
 %
-L'obiettivo è verificare se, partendo da stati perturbati (serbatoi vuoti o troppo pieni), il controllore riesce a riportare il sistema all'equilibrio $x_e$ senza incorrere in instabilità o violazioni fisiche (livelli negativi).
+L'obiettivo è verificare se, partendo da stati perturbati (serbatoi vuoti o troppo pieni), il controllore riesce a riportare il sistema all'equilibrio $x_e$ senza incorrere in instabilità o violazioni fisiche.
 
-Dai test effettuati, emerge che il sistema converge all'equilibrio per un ampio range di condizioni iniziali:
-\begin{itemize}
-    \item Livello $a_1(0)$: il sistema recupera l'equilibrio per valori nell'intervallo approssimativo $[ \dots, \dots ]$ m. % INSERIRE I VALORI TROVATI SU SIMULINK
-    \item Livello $a_2(0)$: il sistema recupera l'equilibrio per valori nell'intervallo approssimativo $[ \dots, \dots ]$ m. % INSERIRE I VALORI TROVATI SU SIMULINK
-\end{itemize}
-Al di fuori di questi intervalli, la simulazione diverge o fallisce a causa del raggiungimento di livelli non fisici (radici di numeri negativi).
+Come mostrato nella griglia di figure sottostante (Figura~\ref{fig:grid_initial_conditions}), il sistema dimostra una notevole robustezza. Per tutte le condizioni iniziali testate, anche quelle estreme (serbatoi quasi vuoti o molto pieni), l'uscita del sistema converge asintoticamente al valore di equilibrio $a_{2,eq}$ senza mostrare comportamenti divergenti.
+
+\begin{figure}[H]
+    \centering
+    % Prima riga
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_1.jpg}
+        \caption{Test 1: $a_1$ quasi vuoto.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_2.jpg}
+        \caption{Test 2: $a_1$ pieno.}
+    \end{subfigure}
+    
+    \vspace{0.5em} % Spazio tra le righe
+
+    % Seconda riga
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_3.jpg}
+        \caption{Test 3: $a_2$ basso.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_4.jpg}
+        \caption{Test 4: $a_2$ alto.}
+    \end{subfigure}
+    
+    \vspace{0.5em}
+
+    % Terza riga
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_5.jpg}
+        \caption{Test 5: Entrambi bassi.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_6.jpg}
+        \caption{Test 6: Entrambi alti.}
+    \end{subfigure}
+    
+    \vspace{0.5em}
+
+    % Quarta riga
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_7.jpg}
+        \caption{Test 7: $a_1$ vuoto, $a_2$ pieno.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/cond_ini_8.jpg}
+        \caption{Test 8: $a_1$ pieno, $a_2$ vuoto.}
+    \end{subfigure}
+    
+    \caption{Risposta del sistema non lineare per diverse condizioni iniziali $a_1(0)$ e $a_2(0)$. In tutti i casi il sistema converge all'equilibrio (linea rossa).}
+    \label{fig:grid_initial_conditions}
+\end{figure}
+
+Questo suggerisce che il bacino di attrazione dell'equilibrio, per il sistema controllato, copre praticamente l'intero spazio operativo fisico dei serbatoi.
 
 \subsection{Analisi dell'ampiezza massima del gradino}
 
 Infine, abbiamo esplorato il range di ampiezza dei riferimenti a gradino $W$ per cui il controllore rimane efficace sul sistema non lineare.
 %
-Incrementando progressivamente l'ampiezza del gradino richiesto, abbiamo osservato che il sistema mantiene la stabilità e prestazioni accettabili fino ad un valore di:
+Incrementando progressivamente l'ampiezza del gradino, non è stato osservato un punto di rottura o instabilità esplicita nelle simulazioni effettuate. Il sistema tende sempre a convergere al valore di riferimento desiderato, anche per ampiezze elevate che portano alla saturazione fisica degli attuatori o allo svuotamento transitorio dei serbatoi.
 %
-\begin{equation}
-    W_{max} \approx \dots \text{ m}. % INSERIRE IL VALORE TROVATO SU SIMULINK (es. 10)
-\end{equation}
-%
-Per ampiezze superiori, l'azione di controllo richiesta porta allo svuotamento completo del primo serbatoio durante il transitorio (fenomeno di wind-up o saturazione fisica), causando il fallimento del controllo.
+In questi casi limite, il tempo di assestamento aumenta considerevolmente a causa dei vincoli fisici (la pompa non può erogare tensione infinita e il flusso è limitato dalla geometria), ma l'azione integrale e la stabilità intrinseca del processo idraulico garantiscono che l'uscita raggiunga infine il set-point senza divergere.
 
 \section{Conclusioni}
 
@@ -425,6 +478,5 @@ Il progetto ha portato alla sintesi di un regolatore in grado di soddisfare pien
 %
 L'approccio basato sul loop-shaping ha permesso di bilanciare le esigenze di banda passante e stabilità.
 %
-Tuttavia, l'analisi approfondita sul modello non lineare e sullo sforzo di controllo ha evidenziato i limiti fisici imposti dalla dinamica idraulica quando si richiedono prestazioni temporali eccessivamente spinte per l'energia disponibile.
-
+L'analisi approfondita sul modello non lineare ha confermato la validità del progetto: sebbene le non linearità introducano sovraelongazioni maggiori e rallentino la risposta in caso di ampie variazioni del riferimento (saturazione), il sistema ha dimostrato un'eccellente robustezza, convergendo all'equilibrio per un ampissimo range di condizioni operative e iniziali.
 \end{document}
